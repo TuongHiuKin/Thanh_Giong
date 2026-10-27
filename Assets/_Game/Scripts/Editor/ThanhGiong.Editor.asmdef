@@ -4,6 +4,7 @@
     "references": [
         "ThanhGiong.Runtime",
         "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Core.Runtime",
         "Unity.AI.Navigation"
     ],
     "includePlatforms": [
@@ -18,4 +19,3 @@
     "versionDefines": [],
     "noEngineReferences": false
 }
-

@@ -24,7 +24,6 @@ namespace ThanhGiong.Editor
         [MenuItem("Thanh Giong/Build Phu Dong Village Map (Clean Rebuild)")]
         public static void BuildMapInActiveScene()
         {
-            // 1. Purge all legacy environment objects, duplicate lights and hockey-puck cylinders
             ClearExistingObjects();
 
             var root = new GameObject("PhuDong_Village_Environment");
@@ -68,7 +67,7 @@ namespace ThanhGiong.Editor
 
         private static void ClearExistingObjects()
         {
-            var all = Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+            var all = Object.FindObjectsByType<GameObject>();
             foreach (var go in all)
             {
                 if (go == null) continue;
@@ -88,7 +87,6 @@ namespace ThanhGiong.Editor
             var grassMat = LoadMat("World/GrassDark.mat");
             var roadMat = LoadMat("World/Road.mat");
 
-            // Broad 140m valley floor
             var baseMeadow = GameObject.CreatePrimitive(PrimitiveType.Plane);
             baseMeadow.name = "ThungLung_CoXanh_Base";
             baseMeadow.transform.SetParent(root.transform);
@@ -96,7 +94,6 @@ namespace ThanhGiong.Editor
             baseMeadow.transform.localScale = new Vector3(14f, 1f, 14f);
             if (grassMat != null) baseMeadow.GetComponent<Renderer>().sharedMaterial = grassMat;
 
-            // Natural winding road
             Vector3[] pathPoints = {
                 new Vector3(0f, 0.04f, -22f), new Vector3(-2f, 0.04f, -12f),
                 new Vector3(0f, 0.04f, 0f), new Vector3(3f, 0.04f, 11f),
@@ -174,7 +171,6 @@ namespace ThanhGiong.Editor
             waterRoot.transform.position = new Vector3(22f, 0f, -14f);
             var waterMat = LoadMat("World/Water.mat");
 
-            // Reflective lake basin
             var lakeSurface = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             lakeSurface.name = "MatNuoc_HoSen_PhuDong";
             lakeSurface.transform.SetParent(waterRoot.transform);
@@ -532,13 +528,6 @@ namespace ThanhGiong.Editor
             l.intensity = 1.05f;
             l.shadows = LightShadows.Soft;
             sun.transform.rotation = Quaternion.Euler(34f, -30f, 0f);
-
-            var volGo = new GameObject("GlobalVolume_PostProcessing");
-            volGo.transform.SetParent(parent.transform);
-            var vol = volGo.AddComponent<Volume>();
-            vol.isGlobal = true;
-            var prof = AssetDatabase.LoadAssetAtPath<VolumeProfile>("Assets/Settings/DefaultVolumeProfile.asset");
-            if (prof != null) vol.sharedProfile = prof;
         }
 
         private static void SetupCinematicCamera()
