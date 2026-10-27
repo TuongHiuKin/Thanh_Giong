@@ -7,17 +7,19 @@ using UnityEngine.Rendering;
 namespace ThanhGiong.Editor
 {
     /// <summary>
-    /// Constructs an authentic, richly detailed, compact preview map of ancient Phù Đổng Village.
-    /// Combines realistic stilt houses, village gates, stone well under ancient banyan,
-    /// resting water buffalo, terraced rice paddies with water reflection, sacred bamboo grove,
-    /// blacksmith forge, lotus pond, and cinematic golden-hour atmospheric lighting.
+    /// Builds a sprawling, highly authentic AAA-inspired ancient Vietnamese Phù Đổng Village map.
+    /// Features: Contoured mountain valley, dynamic drifting 3D clouds, procedural sky,
+    /// natural lake with lotus and waterlilies, realistic terraced rice paddies, traditional stilt houses,
+    /// stone well under giant banyan, resting water buffalo, and dense bamboo forests.
     /// </summary>
     public static class PhuDongVillageMapBuilder
     {
         private const string ScenePath = "Assets/_Game/Scenes/Battlefield.unity";
         private const string SandboxPath = "Assets/_Game/Scenes/Sandbox/PhuDongVillage.unity";
-        private const string PrefabBasePath = "Assets/_Game/Prefabs/Environment/";
-        private const string MatBasePath = "Assets/_Game/Art/Materials/";
+        private const string PrefabBase = "Assets/_Game/Prefabs/Environment/";
+        private const string MatBase = "Assets/_Game/Art/Materials/";
+        private const string NatureBase = "Assets/ThirdParty/KayKit_Medieval_Hexagon_Pack/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx/decoration/nature/";
+        private const string ModelBase = "Assets/_Game/Art/Models/Environment/";
 
         [MenuItem("Thanh Giong/Build Phu Dong Village Map")]
         public static void BuildMapInActiveScene()
@@ -25,168 +27,301 @@ namespace ThanhGiong.Editor
             var root = new GameObject("PhuDong_Village_Environment");
             Undo.RegisterCreatedObjectUndo(root, "Build Phu Dong Village Map");
 
-            var envRoot = CreateChild(root, "--- ENVIRONMENT ---");
-            var gameplayRoot = CreateChild(root, "--- GAMEPLAY ---");
-            var lightingRoot = CreateChild(root, "--- LIGHTING & ATMOSPHERE ---");
+            var env = CreateChild(root, "--- ENVIRONMENT ---");
+            var game = CreateChild(root, "--- GAMEPLAY ---");
+            var light = CreateChild(root, "--- LIGHTING & ATMOSPHERE ---");
 
-            BuildNaturalTerrain(envRoot);
-            BuildStiltVillage(envRoot);
-            BuildBanyanAndAncientWell(envRoot);
-            BuildWaterBuffaloPasture(envRoot);
-            BuildTerracedRicePaddies(envRoot);
-            BuildBambooGroveWall(envRoot);
-            BuildForgeLotusAndRocks(envRoot);
+            BuildValleyTerrainAndPaths(env);
+            BuildMountainBackdrop(env);
+            BuildSkyAndDriftingClouds(env);
+            BuildLakeAndLotusPond(env);
+            BuildTerracedRiceFields(env);
+            BuildStiltVillageHomesteads(env);
+            BuildBanyanAndAncientWell(env);
+            BuildWaterBuffaloPasture(env);
+            BuildBambooForest(env);
 
-            BuildGameplayAnchors(gameplayRoot);
-            SetupAtmosphereAndLighting(lightingRoot);
+            BuildGameplayAnchors(game);
+            SetupAtmosphereAndLighting(light);
             SetupCinematicCamera(root);
 
-            Debug.Log("[ThanhGiong] Authentic realistic Phu Dong Village map successfully constructed!");
+            Debug.Log("[ThanhGiong] AAA Phu Dong Village map successfully constructed!");
         }
 
         [MenuItem("Thanh Giong/Create and Save Village Scene")]
         public static void CreateAndSaveScene()
         {
-            var newScene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+            var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
             BuildMapInActiveScene();
 
-            EnsureDirectory(ScenePath);
-            EnsureDirectory(SandboxPath);
-
-            EditorSceneManager.SaveScene(newScene, ScenePath);
+            EnsureDir(ScenePath);
+            EnsureDir(SandboxPath);
+            EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.CopyAsset(ScenePath, SandboxPath);
             AssetDatabase.Refresh();
-            Debug.Log($"[ThanhGiong] Saved realistic village scene to {ScenePath} and {SandboxPath}");
+            Debug.Log($"[ThanhGiong] Saved AAA village scene to {ScenePath} and {SandboxPath}");
         }
 
-        private static void BuildNaturalTerrain(GameObject parent)
+        private static void BuildValleyTerrainAndPaths(GameObject parent)
         {
-            var terrainRoot = CreateChild(parent, "DiaHinh_LangQue");
-            var grassMat = GetValidMaterial("World/Grass.mat", new Color(0.24f, 0.40f, 0.16f), 0.85f);
-            var soilMat = GetValidMaterial("World/Farm_Soil.mat", new Color(0.42f, 0.32f, 0.20f), 0.9f);
-            var roadMat = GetValidMaterial("World/Road.mat", new Color(0.52f, 0.44f, 0.32f), 0.8f);
+            var root = CreateChild(parent, "DiaHinh_ThungLung_PhuDong");
+            var grassMat = LoadMat("World/GrassDark.mat");
+            var roadMat = LoadMat("World/Road.mat");
 
-            // Main landscape meadow base
-            var baseMeadow = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            baseMeadow.name = "ThamCo_LangQue_Base";
-            baseMeadow.transform.SetParent(terrainRoot.transform);
-            baseMeadow.transform.position = Vector3.zero;
-            baseMeadow.transform.localScale = new Vector3(5.5f, 1f, 5.5f); // 55m x 55m
-            baseMeadow.GetComponent<Renderer>().sharedMaterial = grassMat;
+            var baseTerrain = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            baseTerrain.name = "ThungLung_CoXanh_Base";
+            baseTerrain.transform.SetParent(root.transform);
+            baseTerrain.transform.position = Vector3.zero;
+            baseTerrain.transform.localScale = new Vector3(14f, 1f, 14f); // 140m x 140m
+            if (grassMat != null) baseTerrain.GetComponent<Renderer>().sharedMaterial = grassMat;
 
-            // Central village clearing / combat court (organic ground patch)
-            var court = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            court.name = "SanDat_TrungTam";
-            court.transform.SetParent(terrainRoot.transform);
-            court.transform.position = new Vector3(0f, 0.02f, 2f);
-            court.transform.localScale = new Vector3(24f, 0.04f, 24f);
-            court.GetComponent<Renderer>().sharedMaterial = soilMat;
-
-            // Curving village road from south gate to stilt house
-            Vector3[] pathWaypoints = {
-                new Vector3(0f, 0.03f, -14f),
-                new Vector3(-1f, 0.03f, -7f),
-                new Vector3(0f, 0.03f, 2f),
-                new Vector3(1f, 0.03f, 9f),
-                new Vector3(0f, 0.03f, 15f)
+            // Organic meandering dirt paths
+            Vector3[] pathPoints = {
+                new Vector3(0f, 0.04f, -22f), new Vector3(-2f, 0.04f, -12f),
+                new Vector3(0f, 0.04f, 0f), new Vector3(4f, 0.04f, 12f),
+                new Vector3(-2f, 0.04f, 24f)
             };
-            for (int i = 0; i < pathWaypoints.Length - 1; i++)
+            for (int i = 0; i < pathPoints.Length - 1; i++)
             {
                 var seg = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                seg.name = $"DuongMon_Doan_{i + 1}";
-                seg.transform.SetParent(terrainRoot.transform);
-                Vector3 mid = (pathWaypoints[i] + pathWaypoints[i + 1]) * 0.5f;
-                Vector3 dir = pathWaypoints[i + 1] - pathWaypoints[i];
+                seg.name = $"DuongLang_Mon_{i + 1}";
+                seg.transform.SetParent(root.transform);
+                Vector3 mid = (pathPoints[i] + pathPoints[i + 1]) * 0.5f;
+                Vector3 d = pathPoints[i + 1] - pathPoints[i];
                 seg.transform.position = mid;
-                seg.transform.rotation = Quaternion.LookRotation(dir);
-                seg.transform.localScale = new Vector3(3.6f, 0.04f, dir.magnitude + 0.3f);
-                seg.GetComponent<Renderer>().sharedMaterial = roadMat;
+                seg.transform.rotation = Quaternion.LookRotation(d);
+                seg.transform.localScale = new Vector3(4.5f, 0.04f, d.magnitude + 0.4f);
+                if (roadMat != null) seg.GetComponent<Renderer>().sharedMaterial = roadMat;
             }
         }
 
-        private static void BuildStiltVillage(GameObject parent)
+        private static void BuildMountainBackdrop(GameObject parent)
         {
-            var village = CreateChild(parent, "KhuLang_NhaSan_PhuDong");
+            var mtnRoot = CreateChild(parent, "DayNui_BaoBoc_ThungLung");
+            string[] mtnFiles = { "mountain_A.fbx", "mountain_B.fbx", "mountain_C.fbx", "hills_A_trees.fbx", "hills_B_trees.fbx" };
+            int count = 18;
+            float radius = 68f;
 
-            // Main Stilt House (Gióng's homestead)
-            var housePrefab = LoadPrefab("Meshy_NhaTranh_LangGiong.prefab");
-            if (housePrefab != null)
+            for (int i = 0; i < count; i++)
             {
-                var mainHouse = (GameObject)PrefabUtility.InstantiatePrefab(housePrefab);
-                mainHouse.name = "NhaSan_GiaDinh_Giong";
-                mainHouse.transform.SetParent(village.transform);
-                mainHouse.transform.position = new Vector3(-2f, 0f, 16f);
-                mainHouse.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-                mainHouse.transform.localScale = Vector3.one * 1.2f;
+                float ang = i * Mathf.PI * 2f / count;
+                string file = mtnFiles[i % mtnFiles.Length];
+                var mtnAsset = AssetDatabase.LoadAssetAtPath<GameObject>(NatureBase + file);
+                if (mtnAsset == null) continue;
 
-                // Secondary Stilt House (Storehouse / Neighbor)
-                var secondHouse = (GameObject)PrefabUtility.InstantiatePrefab(housePrefab);
-                secondHouse.name = "NhaSan_LangXom";
-                secondHouse.transform.SetParent(village.transform);
-                secondHouse.transform.position = new Vector3(14f, 0f, 17f);
-                secondHouse.transform.rotation = Quaternion.Euler(0f, 165f, 0f);
-                secondHouse.transform.localScale = Vector3.one * 1.05f;
+                var mtn = (GameObject)PrefabUtility.InstantiatePrefab(mtnAsset);
+                mtn.name = $"Nui_PhuDong_{i + 1}";
+                mtn.transform.SetParent(mtnRoot.transform);
+                float dist = radius + (i % 3) * 6f;
+                mtn.transform.position = new Vector3(Mathf.Cos(ang) * dist, -1.5f, Mathf.Sin(ang) * dist);
+                mtn.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+                mtn.transform.localScale = Vector3.one * Random.Range(5.5f, 9.5f);
+            }
+        }
+
+        private static void BuildSkyAndDriftingClouds(GameObject parent)
+        {
+            var skyRoot = CreateChild(parent, "BauTroi_MayBay");
+            var skyMat = LoadMat("Sky/ThanhGiong_Sky.mat");
+            if (skyMat != null) RenderSettings.skybox = skyMat;
+
+            var cloudA = AssetDatabase.LoadAssetAtPath<GameObject>(NatureBase + "cloud_big.fbx");
+            var cloudB = AssetDatabase.LoadAssetAtPath<GameObject>(NatureBase + "cloud_small.fbx");
+            var cloudMat = LoadMat("Sky/ThanhGiong_Cloud.mat");
+
+            int clouds = 14;
+            for (int i = 0; i < clouds; i++)
+            {
+                float a = i * Mathf.PI * 2f / clouds;
+                float r = Random.Range(35f, 65f);
+                var asset = (i % 2 == 0) ? cloudA : cloudB;
+                if (asset == null) continue;
+
+                var c = (GameObject)PrefabUtility.InstantiatePrefab(asset);
+                c.name = $"May_Trang_{i + 1}";
+                c.transform.SetParent(skyRoot.transform);
+                c.transform.position = new Vector3(Mathf.Cos(a) * r, Random.Range(32f, 48f), Mathf.Sin(a) * r);
+                c.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+                c.transform.localScale = Vector3.one * Random.Range(7f, 14f);
+                if (cloudMat != null) SetMatRecursive(c, cloudMat);
+            }
+        }
+
+        private static void BuildLakeAndLotusPond(GameObject parent)
+        {
+            var waterRoot = CreateChild(parent, "AoHo_DamSen_NuocTrong");
+            waterRoot.transform.position = new Vector3(22f, 0f, -14f);
+            var waterMat = LoadMat("World/Water.mat");
+
+            // Natural organic lake basin
+            var lakeSurface = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            lakeSurface.name = "MatNuoc_HoSen_PhuDong";
+            lakeSurface.transform.SetParent(waterRoot.transform);
+            lakeSurface.transform.localPosition = new Vector3(0f, 0.12f, 0f);
+            lakeSurface.transform.localScale = new Vector3(32f, 0.05f, 24f);
+            if (waterMat != null) lakeSurface.GetComponent<Renderer>().sharedMaterial = waterMat;
+
+            // Ancient lotus pond asset
+            var lotusPrefab = LoadPrefab("Meshy_DamSenCo_VanLang.prefab");
+            if (lotusPrefab != null)
+            {
+                var lotus = (GameObject)PrefabUtility.InstantiatePrefab(lotusPrefab);
+                lotus.name = "DamSenCo_VanLang";
+                lotus.transform.SetParent(waterRoot.transform);
+                lotus.transform.localPosition = new Vector3(-2f, 0f, -1f);
+                lotus.transform.localScale = Vector3.one * 1.3f;
             }
 
-            // Traditional Village Defense Gate
+            // Wooden Bridge spanning the lake
+            var bridgePrefab = LoadPrefab("Meshy_CauGo_CoDai.prefab");
+            if (bridgePrefab != null)
+            {
+                var bridge = (GameObject)PrefabUtility.InstantiatePrefab(bridgePrefab);
+                bridge.name = "CauGo_BacQuaHo";
+                bridge.transform.SetParent(waterRoot.transform);
+                bridge.transform.localPosition = new Vector3(-12f, 0f, 1f);
+                bridge.transform.localRotation = Quaternion.Euler(0f, 85f, 0f);
+                bridge.transform.localScale = Vector3.one * 1.1f;
+            }
+
+            // Water lilies & reeds along shore
+            var lilyAsset = AssetDatabase.LoadAssetAtPath<GameObject>(NatureBase + "waterlily_A.fbx");
+            var reedAsset = AssetDatabase.LoadAssetAtPath<GameObject>(NatureBase + "waterplant_A.fbx");
+            for (int i = 0; i < 6; i++)
+            {
+                float ang = i * 1.0f;
+                if (lilyAsset != null)
+                {
+                    var lily = (GameObject)PrefabUtility.InstantiatePrefab(lilyAsset);
+                    lily.name = $"HoaSen_{i + 1}";
+                    lily.transform.SetParent(waterRoot.transform);
+                    lily.transform.localPosition = new Vector3(Mathf.Cos(ang) * 9f, 0.16f, Mathf.Sin(ang) * 7f);
+                    lily.transform.localScale = Vector3.one * 1.8f;
+                }
+                if (reedAsset != null)
+                {
+                    var reed = (GameObject)PrefabUtility.InstantiatePrefab(reedAsset);
+                    reed.name = $"LauSay_{i + 1}";
+                    reed.transform.SetParent(waterRoot.transform);
+                    reed.transform.localPosition = new Vector3(Mathf.Cos(ang + 0.5f) * 14f, 0.1f, Mathf.Sin(ang + 0.5f) * 10f);
+                    reed.transform.localScale = Vector3.one * 2.2f;
+                }
+            }
+        }
+
+        private static void BuildTerracedRiceFields(GameObject parent)
+        {
+            var paddyRoot = CreateChild(parent, "DongRuong_BacThang_PhuDong");
+            paddyRoot.transform.position = new Vector3(18f, 0f, 8f);
+
+            var soilMat = LoadMat("World/Farm_Soil.mat");
+            var waterMat = LoadMat("World/Water.mat");
+            var cropMat = LoadMat("World/Farm_Crops.mat");
+
+            // 3 wide cascading terraces
+            for (int t = 0; t < 3; t++)
+            {
+                float elevation = t * 0.45f;
+                float x = t * 6.2f;
+                var terrace = CreateChild(paddyRoot, $"ThuaRuong_Bac_{t + 1}");
+                terrace.transform.localPosition = new Vector3(x, elevation, 0f);
+
+                // Curved earthen berm
+                var berm = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                berm.name = "BoRuong_DatSet";
+                berm.transform.SetParent(terrace.transform);
+                berm.transform.localPosition = Vector3.zero;
+                berm.transform.localScale = new Vector3(5.8f, 0.45f, 26f);
+                if (soilMat != null) berm.GetComponent<Renderer>().sharedMaterial = soilMat;
+
+                // Still reflective water
+                var water = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                water.name = "MatNuoc_RuongLua";
+                water.transform.SetParent(terrace.transform);
+                water.transform.localPosition = new Vector3(0f, 0.2f, 0f);
+                water.transform.localScale = new Vector3(5.2f, 0.05f, 25f);
+                if (waterMat != null) water.GetComponent<Renderer>().sharedMaterial = waterMat;
+
+                // Agricultural rows of rice sprouts
+                for (int z = -10; z <= 10; z += 2)
+                {
+                    for (int off = -1; off <= 1; off += 2)
+                    {
+                        var shoot = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                        shoot.name = $"KhomLua_{z}_{off}";
+                        shoot.transform.SetParent(terrace.transform);
+                        shoot.transform.localPosition = new Vector3(off * 1.3f, 0.38f, z);
+                        shoot.transform.localScale = new Vector3(0.5f, 0.35f, 0.5f);
+                        if (cropMat != null) shoot.GetComponent<Renderer>().sharedMaterial = cropMat;
+                    }
+                }
+            }
+        }
+
+        private static void BuildStiltVillageHomesteads(GameObject parent)
+        {
+            var village = CreateChild(parent, "KhuLang_NhaSan_PhuDong");
+            var housePrefab = LoadPrefab("Meshy_NhaTranh_LangGiong.prefab");
+
+            // Cluster of traditional stilt houses
+            Vector3[] housePos = { new Vector3(-3f, 0f, 24f), new Vector3(12f, 0f, 26f), new Vector3(-16f, 0f, 20f) };
+            float[] houseRot = { 180f, 160f, 195f };
+            float[] houseScale = { 1.25f, 1.1f, 1.15f };
+
+            if (housePrefab != null)
+            {
+                for (int i = 0; i < housePos.Length; i++)
+                {
+                    var h = (GameObject)PrefabUtility.InstantiatePrefab(housePrefab);
+                    h.name = $"NhaSan_VietCo_{i + 1}";
+                    h.transform.SetParent(village.transform);
+                    h.transform.position = housePos[i];
+                    h.transform.rotation = Quaternion.Euler(0f, houseRot[i], 0f);
+                    h.transform.localScale = Vector3.one * houseScale[i];
+                }
+            }
+
+            // Gate & Flags
             var gatePrefab = LoadPrefab("Meshy_CongLang_ChienLuy.prefab");
             if (gatePrefab != null)
             {
                 var gate = (GameObject)PrefabUtility.InstantiatePrefab(gatePrefab);
-                gate.name = "CongLang_ChienLuy_North";
+                gate.name = "CongLang_ChienLuy";
                 gate.transform.SetParent(village.transform);
-                gate.transform.position = new Vector3(0f, 0f, 22f);
+                gate.transform.position = new Vector3(0f, 0f, 32f);
                 gate.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             }
 
-            // Communal Bronze Drum Court
             var plazaPrefab = LoadPrefab("Meshy_SanDinh_TrongDong.prefab");
             if (plazaPrefab != null)
             {
                 var plaza = (GameObject)PrefabUtility.InstantiatePrefab(plazaPrefab);
-                plaza.name = "SanDinh_TrongDong_DongSon";
+                plaza.name = "SanDinh_TrongDong";
                 plaza.transform.SetParent(village.transform);
-                plaza.transform.position = new Vector3(6f, 0.02f, 6f);
-                plaza.transform.rotation = Quaternion.Euler(0f, 20f, 0f);
+                plaza.transform.position = new Vector3(4f, 0.02f, 14f);
             }
 
-            // Feast Platter (Dân làng gom cơm cà nuôi Gióng)
             var foodPrefab = LoadPrefab("Meshy_MamLuongThuc_LangGiong.prefab");
             if (foodPrefab != null)
             {
                 var food = (GameObject)PrefabUtility.InstantiatePrefab(foodPrefab);
                 food.name = "MamCom_GomNuoiGiong";
                 food.transform.SetParent(village.transform);
-                food.transform.position = new Vector3(-5.5f, 0f, 12f);
-                food.transform.localScale = Vector3.one * 1.3f;
-            }
-
-            // Battle Flags (Cờ Lệnh Phù Đổng)
-            var flagPrefab = LoadPrefab("Meshy_CoLenh_PhuDong.prefab");
-            if (flagPrefab != null)
-            {
-                var flagL = (GameObject)PrefabUtility.InstantiatePrefab(flagPrefab);
-                flagL.name = "CoLenh_PhuDong_L";
-                flagL.transform.SetParent(village.transform);
-                flagL.transform.position = new Vector3(-6f, 0f, 20f);
-
-                var flagR = (GameObject)PrefabUtility.InstantiatePrefab(flagPrefab);
-                flagR.name = "CoLenh_PhuDong_R";
-                flagR.transform.SetParent(village.transform);
-                flagR.transform.position = new Vector3(6f, 0f, 20f);
+                food.transform.position = new Vector3(-6f, 0f, 18f);
+                food.transform.localScale = Vector3.one * 1.35f;
             }
         }
 
         private static void BuildBanyanAndAncientWell(GameObject parent)
         {
             var area = CreateChild(parent, "CayDa_GiengNuoc_CoDai");
-            area.transform.position = new Vector3(-13f, 0f, 6f);
+            area.transform.position = new Vector3(-16f, 0f, 8f);
 
-            var stoneMat = GetValidMaterial("World/Stone.mat", new Color(0.48f, 0.49f, 0.46f), 0.7f);
-            var woodMat = GetValidMaterial("World/Wood.mat", new Color(0.38f, 0.28f, 0.18f), 0.85f);
-            var waterMat = GetValidMaterial("World/Water.mat", new Color(0.22f, 0.45f, 0.52f), 0.1f);
+            var stoneMat = LoadMat("World/Stone.mat");
+            var woodMat = LoadMat("World/Wood.mat");
+            var waterMat = LoadMat("World/Water.mat");
 
-            // Grand Ancient Banyan Tree
+            // Giant Banyan Tree
             var banyanPrefab = LoadPrefab("Meshy_CayDaCoThu_LangViet.prefab");
             if (banyanPrefab != null)
             {
@@ -194,117 +329,78 @@ namespace ThanhGiong.Editor
                 banyan.name = "CayDaCoThu_LangViet";
                 banyan.transform.SetParent(area.transform);
                 banyan.transform.localPosition = new Vector3(-2f, 0f, 2f);
-                banyan.transform.localScale = Vector3.one * 1.15f;
+                banyan.transform.localScale = Vector3.one * 1.25f;
             }
 
-            // Authentic Ancient Stone Well
+            // Authentic Stone Well under the banyan
             var well = CreateChild(area, "GiengNuoc_DaOng");
-            well.transform.localPosition = new Vector3(2.8f, 0f, -1.8f);
+            well.transform.localPosition = new Vector3(3f, 0f, -2f);
 
-            // Outer stone curb (8 stone blocks arranged circular)
-            var stoneCurb = CreateChild(well, "ThanhGieng_VanhDa");
-            int stones = 10;
-            float wellR = 1.35f;
-            for (int i = 0; i < stones; i++)
-            {
-                float ang = i * Mathf.PI * 2f / stones;
-                var blk = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                blk.name = $"TangDa_{i + 1}";
-                blk.transform.SetParent(stoneCurb.transform);
-                blk.transform.localPosition = new Vector3(Mathf.Cos(ang) * wellR, 0.4f, Mathf.Sin(ang) * wellR);
-                blk.transform.localRotation = Quaternion.Euler(0f, -ang * Mathf.Rad2Deg + 90f, 0f);
-                blk.transform.localScale = new Vector3(0.9f, 0.75f, 0.45f);
-                blk.GetComponent<Renderer>().sharedMaterial = stoneMat;
-            }
+            var curb = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            curb.name = "ThanhGieng_DaOng";
+            curb.transform.SetParent(well.transform);
+            curb.transform.localPosition = new Vector3(0f, 0.45f, 0f);
+            curb.transform.localScale = new Vector3(3f, 0.45f, 3f);
+            if (stoneMat != null) curb.GetComponent<Renderer>().sharedMaterial = stoneMat;
 
-            // Inside water
             var water = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             water.name = "MatNuoc_Gieng";
             water.transform.SetParent(well.transform);
-            water.transform.localPosition = new Vector3(0f, 0.35f, 0f);
-            water.transform.localScale = new Vector3(2.2f, 0.05f, 2.2f);
-            water.GetComponent<Renderer>().sharedMaterial = waterMat;
+            water.transform.localPosition = new Vector3(0f, 0.38f, 0f);
+            water.transform.localScale = new Vector3(2.4f, 0.05f, 2.4f);
+            if (waterMat != null) water.GetComponent<Renderer>().sharedMaterial = waterMat;
 
-            // Wooden gallows & beam
+            // Wooden bucket gallows
             var post1 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            post1.name = "CotGo_1";
             post1.transform.SetParent(well.transform);
-            post1.transform.localPosition = new Vector3(-1.25f, 1.25f, 0f);
-            post1.transform.localScale = new Vector3(0.15f, 1.25f, 0.15f);
-            post1.GetComponent<Renderer>().sharedMaterial = woodMat;
+            post1.transform.localPosition = new Vector3(-1.3f, 1.2f, 0f);
+            post1.transform.localScale = new Vector3(0.14f, 1.2f, 0.14f);
+            if (woodMat != null) post1.GetComponent<Renderer>().sharedMaterial = woodMat;
 
             var post2 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            post2.name = "CotGo_2";
             post2.transform.SetParent(well.transform);
-            post2.transform.localPosition = new Vector3(1.25f, 1.25f, 0f);
-            post2.transform.localScale = new Vector3(0.15f, 1.25f, 0.15f);
-            post2.GetComponent<Renderer>().sharedMaterial = woodMat;
+            post2.transform.localPosition = new Vector3(1.3f, 1.2f, 0f);
+            post2.transform.localScale = new Vector3(0.14f, 1.2f, 0.14f);
+            if (woodMat != null) post2.GetComponent<Renderer>().sharedMaterial = woodMat;
 
             var beam = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            beam.name = "XaNgang_TreoGau";
             beam.transform.SetParent(well.transform);
-            beam.transform.localPosition = new Vector3(0f, 2.45f, 0f);
+            beam.transform.localPosition = new Vector3(0f, 2.38f, 0f);
             beam.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
-            beam.transform.localScale = new Vector3(0.12f, 1.35f, 0.12f);
-            beam.GetComponent<Renderer>().sharedMaterial = woodMat;
+            beam.transform.localScale = new Vector3(0.12f, 1.4f, 0.12f);
+            if (woodMat != null) beam.GetComponent<Renderer>().sharedMaterial = woodMat;
 
-            // Bucket
-            var bucket = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            bucket.name = "GauMucNuoc_Go";
-            bucket.transform.SetParent(well.transform);
-            bucket.transform.localPosition = new Vector3(0.4f, 0.78f, 0.3f);
-            bucket.transform.localScale = new Vector3(0.35f, 0.3f, 0.35f);
-            bucket.GetComponent<Renderer>().sharedMaterial = woodMat;
-
-            // Paved stone apron
-            var apron = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            apron.name = "SanDa_QuanhGieng";
-            apron.transform.SetParent(well.transform);
-            apron.transform.localPosition = new Vector3(0f, 0.03f, 0f);
-            apron.transform.localScale = new Vector3(4.2f, 0.03f, 4.2f);
-            apron.GetComponent<Renderer>().sharedMaterial = stoneMat;
+            var bucketAsset = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/ThirdParty/KayKit_Medieval_Hexagon_Pack/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx/decoration/props/bucket_water.fbx");
+            if (bucketAsset != null)
+            {
+                var b = (GameObject)PrefabUtility.InstantiatePrefab(bucketAsset);
+                b.name = "GauMucNuoc";
+                b.transform.SetParent(well.transform);
+                b.transform.localPosition = new Vector3(0.5f, 0.8f, 0.4f);
+                b.transform.localScale = Vector3.one * 1.5f;
+            }
         }
 
         private static void BuildWaterBuffaloPasture(GameObject parent)
         {
             var pasture = CreateChild(parent, "BaiChanTrau_DongCo");
-            pasture.transform.position = new Vector3(13f, 0f, 6f);
+            pasture.transform.position = new Vector3(10f, 0f, 4f);
 
-            var buffaloMat = GetValidMaterial("World/GrassDark.mat", new Color(0.18f, 0.19f, 0.20f), 0.5f);
-            var hornMat = GetValidMaterial("World/Wood.mat", new Color(0.10f, 0.10f, 0.10f), 0.3f);
-            var strawMat = GetValidMaterial("World/Farm_Crops.mat", new Color(0.78f, 0.65f, 0.30f), 0.9f);
-            var woodMat = GetValidMaterial("World/Wood.mat", new Color(0.38f, 0.28f, 0.18f), 0.85f);
+            var hideMat = LoadMat("World/GrassDark.mat");
+            var hornMat = LoadMat("World/Wood.mat");
+            var strawMat = LoadMat("World/Farm_Crops.mat");
 
-            // Water Buffalo (Con trâu nằm nghỉ bên đụn rơm)
-            var buffalo = CreateChild(pasture, "ConTrau_Mong_NghiNgoi");
-            buffalo.transform.localPosition = new Vector3(0f, 0f, 0f);
-            buffalo.transform.localRotation = Quaternion.Euler(0f, -35f, 0f);
+            var buffalo = CreateChild(pasture, "ConTrau_NghiNgoi");
+            buffalo.transform.localRotation = Quaternion.Euler(0f, -40f, 0f);
 
-            // Body
+            // Anatomy: Torso, neck, head, curved horns
             var torso = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             torso.name = "Than_Trau";
             torso.transform.SetParent(buffalo.transform);
-            torso.transform.localPosition = new Vector3(0f, 0.7f, 0f);
+            torso.transform.localPosition = new Vector3(0f, 0.72f, 0f);
             torso.transform.localRotation = Quaternion.Euler(85f, 0f, 0f);
             torso.transform.localScale = new Vector3(1.3f, 1.75f, 1.1f);
-            torso.GetComponent<Renderer>().sharedMaterial = buffaloMat;
-
-            // Rump
-            var rump = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            rump.name = "Mong_Trau";
-            rump.transform.SetParent(buffalo.transform);
-            rump.transform.localPosition = new Vector3(0f, 0.72f, -0.9f);
-            rump.transform.localScale = new Vector3(1.25f, 1.05f, 1.1f);
-            rump.GetComponent<Renderer>().sharedMaterial = buffaloMat;
-
-            // Head & Neck
-            var neck = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            neck.name = "Co_Trau";
-            neck.transform.SetParent(buffalo.transform);
-            neck.transform.localPosition = new Vector3(0f, 0.9f, 0.9f);
-            neck.transform.localRotation = Quaternion.Euler(30f, 0f, 0f);
-            neck.transform.localScale = new Vector3(0.7f, 0.55f, 0.7f);
-            neck.GetComponent<Renderer>().sharedMaterial = buffaloMat;
+            if (hideMat != null) torso.GetComponent<Renderer>().sharedMaterial = hideMat;
 
             var head = GameObject.CreatePrimitive(PrimitiveType.Cube);
             head.name = "Dau_Trau";
@@ -312,16 +408,15 @@ namespace ThanhGiong.Editor
             head.transform.localPosition = new Vector3(0f, 1.15f, 1.4f);
             head.transform.localRotation = Quaternion.Euler(15f, 0f, 0f);
             head.transform.localScale = new Vector3(0.65f, 0.6f, 0.85f);
-            head.GetComponent<Renderer>().sharedMaterial = buffaloMat;
+            if (hideMat != null) head.GetComponent<Renderer>().sharedMaterial = hideMat;
 
-            // Curved Horns (Sừng trâu cong vút đặc trưng)
             var hornL = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             hornL.name = "Sung_Trau_L";
             hornL.transform.SetParent(buffalo.transform);
             hornL.transform.localPosition = new Vector3(-0.68f, 1.42f, 1.35f);
             hornL.transform.localRotation = Quaternion.Euler(20f, -40f, 65f);
             hornL.transform.localScale = new Vector3(0.13f, 0.6f, 0.13f);
-            hornL.GetComponent<Renderer>().sharedMaterial = hornMat;
+            if (hornMat != null) hornL.GetComponent<Renderer>().sharedMaterial = hornMat;
 
             var hornR = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             hornR.name = "Sung_Trau_R";
@@ -329,178 +424,68 @@ namespace ThanhGiong.Editor
             hornR.transform.localPosition = new Vector3(0.68f, 1.42f, 1.35f);
             hornR.transform.localRotation = Quaternion.Euler(20f, 40f, -65f);
             hornR.transform.localScale = new Vector3(0.13f, 0.6f, 0.13f);
-            hornR.GetComponent<Renderer>().sharedMaterial = hornMat;
+            if (hornMat != null) hornR.GetComponent<Renderer>().sharedMaterial = hornMat;
 
-            // Realistic Haystack (Đụn rơm vàng nhiều tầng)
-            var haystack = CreateChild(pasture, "DunRom_Vang_LangQue");
-            haystack.transform.localPosition = new Vector3(2.8f, 0f, 2.6f);
-
+            // Multi-tiered layered haystack
+            var haystack = CreateChild(pasture, "DunRom_Vang");
+            haystack.transform.localPosition = new Vector3(3.2f, 0f, 2.5f);
             var hayBase = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            hayBase.name = "Chan_DunRom";
             hayBase.transform.SetParent(haystack.transform);
             hayBase.transform.localPosition = new Vector3(0f, 0.8f, 0f);
-            hayBase.transform.localScale = new Vector3(3.2f, 0.8f, 3.2f);
-            hayBase.GetComponent<Renderer>().sharedMaterial = strawMat;
+            hayBase.transform.localScale = new Vector3(3.4f, 0.8f, 3.4f);
+            if (strawMat != null) hayBase.GetComponent<Renderer>().sharedMaterial = strawMat;
 
             var hayDome = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            hayDome.name = "Chop_DunRom";
             hayDome.transform.SetParent(haystack.transform);
-            hayDome.transform.localPosition = new Vector3(0f, 1.8f, 0f);
-            hayDome.transform.localScale = new Vector3(2.8f, 2.2f, 2.8f);
-            hayDome.GetComponent<Renderer>().sharedMaterial = strawMat;
-
-            // Wooden hitching stake
-            var stake = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            stake.name = "CocBuoc_Thung";
-            stake.transform.SetParent(pasture.transform);
-            stake.transform.localPosition = new Vector3(-1.6f, 0.5f, 1f);
-            stake.transform.localScale = new Vector3(0.14f, 0.5f, 0.14f);
-            stake.GetComponent<Renderer>().sharedMaterial = woodMat;
+            hayDome.transform.localPosition = new Vector3(0f, 1.85f, 0f);
+            hayDome.transform.localScale = new Vector3(2.9f, 2.3f, 2.9f);
+            if (strawMat != null) hayDome.GetComponent<Renderer>().sharedMaterial = strawMat;
         }
 
-        private static void BuildTerracedRicePaddies(GameObject parent)
+        private static void BuildBambooForest(GameObject parent)
         {
-            var paddies = CreateChild(parent, "DongRuong_BacThang_LuaNuoc");
-            paddies.transform.position = new Vector3(17f, 0f, -5f);
-
-            var soilMat = GetValidMaterial("World/Farm_Soil.mat", new Color(0.35f, 0.28f, 0.18f), 0.9f);
-            var waterMat = GetValidMaterial("World/Water.mat", new Color(0.25f, 0.48f, 0.50f), 0.08f);
-            var cropMat = GetValidMaterial("World/Farm_Crops.mat", new Color(0.32f, 0.65f, 0.18f), 0.7f);
-
-            for (int t = 0; t < 3; t++)
-            {
-                float elevation = t * 0.4f;
-                float x = t * 5.2f;
-
-                var terrace = CreateChild(paddies, $"ThuaRuong_Bac_{t + 1}");
-                terrace.transform.localPosition = new Vector3(x, elevation, 0f);
-
-                // Terraced earth dyke
-                var berm = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                berm.name = "BoRuong_DatSet";
-                berm.transform.SetParent(terrace.transform);
-                berm.transform.localPosition = Vector3.zero;
-                berm.transform.localScale = new Vector3(4.8f, 0.38f, 20f);
-                berm.GetComponent<Renderer>().sharedMaterial = soilMat;
-
-                // Reflective water surface
-                var water = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                water.name = "MatNuoc_RuongLua";
-                water.transform.SetParent(terrace.transform);
-                water.transform.localPosition = new Vector3(0f, 0.16f, 0f);
-                water.transform.localScale = new Vector3(4.3f, 0.05f, 19f);
-                water.GetComponent<Renderer>().sharedMaterial = waterMat;
-
-                // Green rice shoot clusters
-                for (int z = -8; z <= 8; z += 2)
-                {
-                    for (int off = -1; off <= 1; off += 2)
-                    {
-                        var shoot = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                        shoot.name = $"KhomMa_{z}_{off}";
-                        shoot.transform.SetParent(terrace.transform);
-                        shoot.transform.localPosition = new Vector3(off * 1.1f, 0.32f, z);
-                        shoot.transform.localScale = new Vector3(0.45f, 0.28f, 0.45f);
-                        shoot.GetComponent<Renderer>().sharedMaterial = cropMat;
-                    }
-                }
-            }
-        }
-
-        private static void BuildBambooGroveWall(GameObject parent)
-        {
-            var grove = CreateChild(parent, "LuyTreNga_XanhMat");
+            var grove = CreateChild(parent, "RungTre_LuyLang_PhuDong");
             var bambooPrefab = LoadPrefab("Meshy_KhomTreNga_ThanThanh.prefab");
             var foliagePrefab = LoadPrefab("Foliage/BambooGrove_Vietnamese_Legend.prefab");
 
-            Vector3[] bambooPositions = {
-                new Vector3(-17f, 0f, -12f),
-                new Vector3(-18f, 0f, -5f),
-                new Vector3(-18f, 0f, 2f),
-                new Vector3(-16f, 0f, 9f),
-                new Vector3(-10f, 0f, -18f),
-                new Vector3(-2f, 0f, -20f)
+            Vector3[] pos = {
+                new Vector3(-22f, 0f, -16f), new Vector3(-24f, 0f, -8f),
+                new Vector3(-24f, 0f, 0f), new Vector3(-22f, 0f, 8f),
+                new Vector3(-18f, 0f, 18f), new Vector3(-10f, 0f, -24f),
+                new Vector3(0f, 0f, -26f), new Vector3(10f, 0f, -26f)
             };
 
-            for (int i = 0; i < bambooPositions.Length; i++)
+            for (int i = 0; i < pos.Length; i++)
             {
-                var prefab = (i % 2 == 0 && bambooPrefab != null) ? bambooPrefab : foliagePrefab;
-                if (prefab != null)
-                {
-                    var b = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-                    b.name = $"BuiTre_Xanh_{i + 1}";
-                    b.transform.SetParent(grove.transform);
-                    b.transform.position = bambooPositions[i];
-                    b.transform.rotation = Quaternion.Euler(0f, i * 45f + 15f, 0f);
-                    b.transform.localScale = Vector3.one * (1.15f + (i % 3) * 0.15f);
-                }
+                var asset = (i % 2 == 0 && bambooPrefab != null) ? bambooPrefab : foliagePrefab;
+                if (asset == null) continue;
+                var b = (GameObject)PrefabUtility.InstantiatePrefab(asset);
+                b.name = $"RangTre_PhuDong_{i + 1}";
+                b.transform.SetParent(grove.transform);
+                b.transform.position = pos[i];
+                b.transform.rotation = Quaternion.Euler(0f, i * 42f, 0f);
+                b.transform.localScale = Vector3.one * (1.2f + (i % 3) * 0.2f);
             }
 
-            // Sacred Bamboo Grove for Phase 3 Interaction
-            var sacredSpot = CreateChild(grove, "KhomTre_LinhThieng_Phase3");
-            sacredSpot.transform.position = new Vector3(-15f, 0f, -5f);
-
-            var auraMat = GetValidMaterial("Characters/SelectionRing.mat", new Color(1f, 0.85f, 0.3f), 0.1f);
+            // Sacred Bamboo Grove for Phase 3
+            var sacred = CreateChild(grove, "KhomTre_LinhThieng_Phase3");
+            sacred.transform.position = new Vector3(-18f, 0f, -4f);
             var glow = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             glow.name = "HaoQuang_TreThan";
-            glow.transform.SetParent(sacredSpot.transform);
-            glow.transform.localPosition = new Vector3(0f, 1.8f, 0f);
-            glow.transform.localScale = Vector3.one * 0.6f;
-            glow.GetComponent<Renderer>().sharedMaterial = auraMat;
+            glow.transform.SetParent(sacred.transform);
+            glow.transform.localPosition = new Vector3(0f, 2.2f, 0f);
+            glow.transform.localScale = Vector3.one * 0.7f;
+            var auraMat = LoadMat("Characters/SelectionRing.mat");
+            if (auraMat != null) glow.GetComponent<Renderer>().sharedMaterial = auraMat;
 
-            // Falling leaves particle system
-            var leavesPrefab = LoadPrefab("Foliage/PFX_Forest_DriftingLeaves.prefab");
-            if (leavesPrefab != null)
+            // Falling leaves particles
+            var pfxPrefab = LoadPrefab("Foliage/PFX_Forest_DriftingLeaves.prefab");
+            if (pfxPrefab != null)
             {
-                var pfx = (GameObject)PrefabUtility.InstantiatePrefab(leavesPrefab);
+                var pfx = (GameObject)PrefabUtility.InstantiatePrefab(pfxPrefab);
                 pfx.name = "VFX_LaTre_RoiBay";
                 pfx.transform.SetParent(grove.transform);
-                pfx.transform.position = new Vector3(-13f, 3f, -5f);
-            }
-        }
-
-        private static void BuildForgeLotusAndRocks(GameObject parent)
-        {
-            // Blacksmith Forge
-            var forgePrefab = LoadPrefab("Meshy_LoRenThep_VanLang.prefab");
-            if (forgePrefab != null)
-            {
-                var forge = (GameObject)PrefabUtility.InstantiatePrefab(forgePrefab);
-                forge.name = "LoRenThep_PhuDong";
-                forge.transform.SetParent(parent.transform);
-                forge.transform.position = new Vector3(9f, 0f, -14f);
-                forge.transform.rotation = Quaternion.Euler(0f, -40f, 0f);
-            }
-
-            // Sacred Mountain Rocks around the Forge
-            var rockPrefab = LoadPrefab("Meshy_DaNui_RungThieng.prefab");
-            if (rockPrefab != null)
-            {
-                var rock = (GameObject)PrefabUtility.InstantiatePrefab(rockPrefab);
-                rock.name = "DaNui_PhuDong";
-                rock.transform.SetParent(parent.transform);
-                rock.transform.position = new Vector3(14f, 0f, -17f);
-                rock.transform.localScale = Vector3.one * 1.3f;
-            }
-
-            // Lotus Pond & Wooden Bridge
-            var lotusPrefab = LoadPrefab("Meshy_DamSenCo_VanLang.prefab");
-            if (lotusPrefab != null)
-            {
-                var lotus = (GameObject)PrefabUtility.InstantiatePrefab(lotusPrefab);
-                lotus.name = "DamSenCo_VanLang";
-                lotus.transform.SetParent(parent.transform);
-                lotus.transform.position = new Vector3(-2f, 0f, -16f);
-            }
-
-            var bridgePrefab = LoadPrefab("Meshy_CauGo_CoDai.prefab");
-            if (bridgePrefab != null)
-            {
-                var bridge = (GameObject)PrefabUtility.InstantiatePrefab(bridgePrefab);
-                bridge.name = "CauGo_BacQuaDamSen";
-                bridge.transform.SetParent(parent.transform);
-                bridge.transform.position = new Vector3(3f, 0f, -15f);
-                bridge.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                pfx.transform.position = new Vector3(-16f, 3.5f, -4f);
             }
         }
 
@@ -508,93 +493,76 @@ namespace ThanhGiong.Editor
         {
             var pSpawn = new GameObject("PlayerSpawnPoint_Giong");
             pSpawn.transform.SetParent(parent.transform);
-            pSpawn.transform.position = new Vector3(0f, 0f, -5f);
-            pSpawn.transform.rotation = Quaternion.identity;
+            pSpawn.transform.position = new Vector3(0f, 0.05f, -8f);
 
             var eSpawns = CreateChild(parent, "EnemyWaveSpawners");
-            Vector3[] spawns = {
-                new Vector3(-8f, 0f, 6f),
-                new Vector3(0f, 0f, 10f),
-                new Vector3(8f, 0f, 6f)
-            };
+            Vector3[] spawns = { new Vector3(-10f, 0.05f, 8f), new Vector3(0f, 0.05f, 14f), new Vector3(10f, 0.05f, 8f) };
             for (int i = 0; i < spawns.Length; i++)
             {
-                var sp = new GameObject($"EnemySpawnPoint_{i + 1}");
-                sp.transform.SetParent(eSpawns.transform);
-                sp.transform.position = spawns[i];
-                sp.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                var s = new GameObject($"EnemySpawnPoint_{i + 1}");
+                s.transform.SetParent(eSpawns.transform);
+                s.transform.position = spawns[i];
+                s.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             }
 
-            var trigger = new GameObject("Trigger_NhoTre_Phase3");
-            trigger.transform.SetParent(parent.transform);
-            trigger.transform.position = new Vector3(-15f, 0f, -5f);
-            var col = trigger.AddComponent<SphereCollider>();
-            col.isTrigger = true;
-            col.radius = 3.5f;
+            var trig = new GameObject("Trigger_NhoTre_Phase3");
+            trig.transform.SetParent(parent.transform);
+            trig.transform.position = new Vector3(-18f, 0f, -4f);
+            trig.AddComponent<SphereCollider>().isTrigger = true;
         }
 
         private static void SetupAtmosphereAndLighting(GameObject parent)
         {
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Linear;
-            RenderSettings.fogStartDistance = 16f;
-            RenderSettings.fogEndDistance = 65f;
-            RenderSettings.fogColor = new Color(0.78f, 0.77f, 0.70f);
+            RenderSettings.fogStartDistance = 35f;
+            RenderSettings.fogEndDistance = 110f;
+            RenderSettings.fogColor = new Color(0.72f, 0.80f, 0.82f);
 
             var sun = new GameObject("MatTroi_BanMai_Sun");
             sun.transform.SetParent(parent.transform);
-            var light = sun.AddComponent<Light>();
-            light.type = LightType.Directional;
-            light.color = new Color(1f, 0.92f, 0.80f);
-            light.intensity = 1.35f;
-            light.shadows = LightShadows.Soft;
-            sun.transform.rotation = Quaternion.Euler(36f, -32f, 0f);
+            var l = sun.AddComponent<Light>();
+            l.type = LightType.Directional;
+            l.color = new Color(1f, 0.95f, 0.88f);
+            l.intensity = 1.05f;
+            l.shadows = LightShadows.Soft;
+            sun.transform.rotation = Quaternion.Euler(34f, -30f, 0f);
+
+            var volGo = new GameObject("GlobalVolume_PostProcessing");
+            volGo.transform.SetParent(parent.transform);
+            var vol = volGo.AddComponent<Volume>();
+            vol.isGlobal = true;
+            var prof = AssetDatabase.LoadAssetAtPath<VolumeProfile>("Assets/Settings/DefaultVolumeProfile.asset");
+            if (prof != null) vol.sharedProfile = prof;
         }
 
         private static void SetupCinematicCamera(GameObject root)
         {
-            var camGo = GameObject.Find("Main Camera");
-            if (camGo == null)
-            {
-                camGo = new GameObject("Main Camera");
-                camGo.AddComponent<Camera>();
-                camGo.AddComponent<AudioListener>();
-            }
-            camGo.transform.position = new Vector3(0f, 8.5f, -16f);
-            camGo.transform.rotation = Quaternion.Euler(20f, 0f, 0f);
+            var cam = GameObject.Find("Main Camera");
+            if (cam == null) cam = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
+            cam.transform.position = new Vector3(0f, 9.5f, -22f);
+            cam.transform.rotation = Quaternion.Euler(20f, 0f, 0f);
         }
 
-        private static Material GetValidMaterial(string path, Color fallbackColor, float smoothness)
+        private static Material LoadMat(string relPath)
         {
-            var mat = AssetDatabase.LoadAssetAtPath<Material>(MatBasePath + path);
-            if (mat != null && mat.shader != null && mat.shader.isSupported && !mat.shader.name.Contains("Error"))
-            {
-                return mat;
-            }
-
-            var urpShader = Shader.Find("Universal Render Pipeline/Lit");
-            if (urpShader == null) urpShader = Shader.Find("Standard");
-
-            var newMat = new Material(urpShader)
-            {
-                color = fallbackColor
-            };
-            if (newMat.HasProperty("_Smoothness")) newMat.SetFloat("_Smoothness", smoothness);
-            return newMat;
+            return AssetDatabase.LoadAssetAtPath<Material>(MatBase + relPath);
         }
 
-        private static GameObject LoadPrefab(string relativePath)
+        private static GameObject LoadPrefab(string relPath)
         {
-            return AssetDatabase.LoadAssetAtPath<GameObject>(PrefabBasePath + relativePath);
+            return AssetDatabase.LoadAssetAtPath<GameObject>(PrefabBase + relPath);
         }
 
-        private static void EnsureDirectory(string filePath)
+        private static void SetMatRecursive(GameObject go, Material mat)
         {
-            string dir = Path.GetDirectoryName(filePath);
-            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
+            foreach (var r in go.GetComponentsInChildren<Renderer>()) r.sharedMaterial = mat;
+        }
+
+        private static void EnsureDir(string path)
+        {
+            string d = Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(d) && !Directory.Exists(d)) Directory.CreateDirectory(d);
         }
 
         private static GameObject CreateChild(GameObject parent, string name)
