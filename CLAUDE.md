@@ -119,7 +119,8 @@ When adding a new term, update `Docs/Glossary.md` in the same PR.
 
 - Follow the `git-safe-operations` skill for every git operation.
 - `main` must always open and run. Never commit or push (including force push) to `main`.
-- One task per new branch, named `<person-name>/<task-done>` (lowercase, no diacritics), e.g. `kien/add-phase2-waves`. Merge via Pull Request with 1 approving review.
+- One task per new branch, named `<person-name>/<task-done>` (lowercase, task part in English), e.g. `kien/add-phase2-waves`. Merge via Pull Request with 1 approving review.
+- **Everything pushed is in English:** branch names, commit messages, PR titles and descriptions.
 - Commit message: `<type>: <short description>`, where type is `feat | fix | art | data | docs | refactor | test | chore`.
 - Models, textures, audio and video go through **Git LFS** (see `.gitattributes`). Never commit files > 50 MB, `Builds/`, `Library/`, or test result files.
 - AI does not commit, push, merge or create branches unless the user asks.
