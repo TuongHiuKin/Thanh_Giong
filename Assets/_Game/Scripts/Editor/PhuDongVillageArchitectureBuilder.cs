@@ -4,13 +4,14 @@ using UnityEngine;
 namespace ThanhGiong.Editor
 {
     /// <summary>
-    /// Builds village stilt houses, communal yard, ancient stone well, iron forge, bamboo groves,
-    /// and living Vietnamese villagers.
+    /// Builds village stilt houses, authentic East Asian communal drum pavilion, ancient stone well,
+    /// timber pasture, bamboo groves, and living Vietnamese villagers.
+    /// Eliminates all primitive placeholder capsules and outdated Meshy PRUDemo models.
     /// </summary>
     public static class PhuDongVillageArchitectureBuilder
     {
         private const string PrefabBase = "Assets/_Game/Prefabs/Environment/";
-        private const string KayKitBase = "Assets/ThirdParty/KayKit_Medieval_Hexagon_Pack/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx/";
+        private const string AsianBase = "Assets/_Game/Art/AsianCulture/";
         private const string VillagerBase = "Assets/_Game/Art/Villagers/Rigged/";
         private const string MountBase = "Assets/_Game/Prefabs/Mounts/";
 
@@ -18,8 +19,10 @@ namespace ThanhGiong.Editor
         {
             var root = CreateChild(env, "KhuLang_NhaSan_ChienLuy");
             var housePrefab = LoadPrefab("Meshy_NhaTranh_LangGiong.prefab");
+            var fenceAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_Fence01.glb");
+            var lampAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_OutterLamp.glb");
 
-            // Stilt houses cluster framing the northern clearing
+            // 1. Stilt houses cluster framing the northern clearing
             Vector3[] housePos = { new Vector3(-3f, 0f, 25f), new Vector3(13f, 0f, 27f), new Vector3(-17f, 0f, 21f) };
             float[] houseRot = { 180f, 160f, 195f };
             if (housePrefab != null)
@@ -34,7 +37,7 @@ namespace ThanhGiong.Editor
                 }
             }
 
-            // Fortified Gate & Watchtowers
+            // 2. Fortified Gate & Watchtowers
             var gatePrefab = LoadPrefab("Meshy_CongLang_ChienLuy.prefab");
             if (gatePrefab != null)
             {
@@ -56,66 +59,85 @@ namespace ThanhGiong.Editor
                 t2.transform.position = new Vector3(12f, 0f, 32f);
             }
 
-            // Dong Son Bronze Drum Communal Plaza
-            var plazaPrefab = LoadPrefab("Meshy_SanDinh_TrongDong.prefab");
-            if (plazaPrefab != null)
-            {
-                var plaza = (GameObject)PrefabUtility.InstantiatePrefab(plazaPrefab, root.transform);
-                plaza.name = "SanDinh_TrongDong_DongSon";
-                plaza.transform.position = new Vector3(4f, 0.02f, 14f);
-            }
+            // 3. Authentic East Asian Communal Drum Pavilion & Bell Tower (Replacing garish red hex gazebo)
+            BuildCommunalDrumPavilion(root);
 
-            // Ceremonial War Flags along the main path
-            var flagPrefab = LoadPrefab("Meshy_CoLenh_PhuDong.prefab");
-            if (flagPrefab != null)
+            // 4. Outdoor traditional wooden lanterns along the main village avenue
+            if (lampAsset != null)
             {
-                float[] flagZ = { 18f, 6f, -6f, -22f };
-                for (int i = 0; i < flagZ.Length; i++)
+                float[] lampZ = { 16f, 6f, -4f, -12f };
+                for (int i = 0; i < lampZ.Length; i++)
                 {
-                    var fL = (GameObject)PrefabUtility.InstantiatePrefab(flagPrefab, root.transform);
-                    fL.name = $"CoLenh_Tay_{i + 1}";
-                    fL.transform.position = new Vector3(-6.2f, 0f, flagZ[i]);
-                    fL.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                    var lL = (GameObject)PrefabUtility.InstantiatePrefab(lampAsset, root.transform);
+                    lL.name = $"DenLong_Go_Tay_{i + 1}";
+                    lL.transform.position = new Vector3(-4.8f, 0f, lampZ[i]);
+                    lL.transform.localScale = Vector3.one * 1.25f;
 
-                    var fR = (GameObject)PrefabUtility.InstantiatePrefab(flagPrefab, root.transform);
-                    fR.name = $"CoLenh_Dong_{i + 1}";
-                    fR.transform.position = new Vector3(6.2f, 0f, flagZ[i]);
-                    fR.transform.rotation = Quaternion.Euler(0f, 270f, 0f);
+                    var lR = (GameObject)PrefabUtility.InstantiatePrefab(lampAsset, root.transform);
+                    lR.name = $"DenLong_Go_Dong_{i + 1}";
+                    lR.transform.position = new Vector3(4.8f, 0f, lampZ[i]);
+                    lR.transform.localScale = Vector3.one * 1.25f;
                 }
             }
 
-            // Food Offering Basket
-            var foodPrefab = LoadPrefab("Meshy_MamLuongThuc_LangGiong.prefab");
-            if (foodPrefab != null)
+            // 5. Traditional wooden fences along village homesteads
+            if (fenceAsset != null)
             {
-                var food = (GameObject)PrefabUtility.InstantiatePrefab(foodPrefab, root.transform);
-                food.name = "MamCom_GomNuoiGiong";
-                food.transform.position = new Vector3(-6f, 0f, 18f);
-                food.transform.localScale = Vector3.one * 1.35f;
+                Vector3[] fPos = { new Vector3(-9f, 0f, 19f), new Vector3(8.5f, 0f, 21f), new Vector3(-14f, 0f, 24f) };
+                for (int i = 0; i < fPos.Length; i++)
+                {
+                    var f = (GameObject)PrefabUtility.InstantiatePrefab(fenceAsset, root.transform);
+                    f.name = $"HangRao_Go_{i + 1}";
+                    f.transform.position = fPos[i];
+                    f.transform.localScale = Vector3.one * 1.4f;
+                }
+            }
+        }
+
+        private static void BuildCommunalDrumPavilion(GameObject parent)
+        {
+            var pavilion = CreateChild(parent, "DinhLang_LauTrong_PhuDong");
+            pavilion.transform.position = new Vector3(5.5f, 0f, 13.5f);
+
+            var drumAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_Drum.glb");
+            var bellAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_BellStructure.glb");
+            var baseAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_BuildingBase.glb");
+            var roofAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_RoomRoof.glb");
+
+            // Elevated pavilion base (Natural human scale ~8.5m x 12.8m)
+            if (baseAsset != null)
+            {
+                var b = (GameObject)PrefabUtility.InstantiatePrefab(baseAsset, pavilion.transform);
+                b.name = "SanNen_Dinh";
+                b.transform.localPosition = Vector3.zero;
+                b.transform.localScale = new Vector3(0.55f, 0.45f, 0.55f);
             }
 
-            // Village storage props: barrels, crates, sacks
-            var sackAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/props/sack.fbx");
-            var barrelAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/props/barrel.fbx");
-            var crateAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/props/crate_A_big.fbx");
+            // Traditional Upturned Tiled Roof
+            if (roofAsset != null)
+            {
+                var r = (GameObject)PrefabUtility.InstantiatePrefab(roofAsset, pavilion.transform);
+                r.name = "MaiNgoi_DinhLang";
+                r.transform.localPosition = new Vector3(0f, 3.2f, 0f);
+                r.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
+            }
 
-            if (sackAsset != null)
+            // Traditional Bronze/Leather Battle Drum on pedestal (~1.7m tall)
+            if (drumAsset != null)
             {
-                var s = (GameObject)PrefabUtility.InstantiatePrefab(sackAsset, root.transform);
-                s.transform.position = new Vector3(-8.2f, 0f, 21.5f);
-                s.transform.localScale = Vector3.one * 2.2f;
+                var drum = (GameObject)PrefabUtility.InstantiatePrefab(drumAsset, pavilion.transform);
+                drum.name = "TrongDong_TranThanh";
+                drum.transform.localPosition = new Vector3(0f, 0.45f, 0f);
+                drum.transform.localScale = Vector3.one * 0.9f;
             }
-            if (barrelAsset != null)
+
+            // Sacred Bell Structure beside pavilion
+            if (bellAsset != null)
             {
-                var b = (GameObject)PrefabUtility.InstantiatePrefab(barrelAsset, root.transform);
-                b.transform.position = new Vector3(-7f, 0f, 22.5f);
-                b.transform.localScale = Vector3.one * 2.2f;
-            }
-            if (crateAsset != null)
-            {
-                var c = (GameObject)PrefabUtility.InstantiatePrefab(crateAsset, root.transform);
-                c.transform.position = new Vector3(8.5f, 0f, 23.5f);
-                c.transform.localScale = Vector3.one * 1.8f;
+                var bell = (GameObject)PrefabUtility.InstantiatePrefab(bellAsset, pavilion.transform);
+                bell.name = "GiaChuong_DongCo";
+                bell.transform.localPosition = new Vector3(4.2f, 0f, 1.2f);
+                bell.transform.localScale = Vector3.one * 0.9f;
             }
         }
 
@@ -124,17 +146,18 @@ namespace ThanhGiong.Editor
             var root = CreateChild(env, "CayDa_GiengNuoc_CoDai");
             root.transform.position = new Vector3(-17f, 0f, 8f);
 
-            // Grand Ancient Banyan Tree (Cây Đa Cổ Thụ Ngàn Năm)
-            var banyanPrefab = LoadPrefab("Meshy_CayDaCoThu_LangViet.prefab");
-            if (banyanPrefab != null)
+            // Majestic Ancient Shaded Tree (Replacing ugly yellow tree with lush organic canopy)
+            var treeAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "avatar-garden_Tree03.glb")
+                         ?? AssetDatabase.LoadAssetAtPath<GameObject>(PrefabBase + "Foliage/TreeCluster_Broadleaf_Oak.prefab");
+            if (treeAsset != null)
             {
-                var banyan = (GameObject)PrefabUtility.InstantiatePrefab(banyanPrefab, root.transform);
-                banyan.name = "CayDaCoThu_LangViet";
-                banyan.transform.localPosition = new Vector3(-2f, 0f, 2f);
-                banyan.transform.localScale = Vector3.one * 1.3f;
+                var tree = (GameObject)PrefabUtility.InstantiatePrefab(treeAsset, root.transform);
+                tree.name = "CayDaCoThu_BongMat";
+                tree.transform.localPosition = new Vector3(-2.5f, 0f, 2f);
+                tree.transform.localScale = Vector3.one * 1.85f;
             }
 
-            // Authentic Vietnamese Ancient Stone Well (Giếng Ngọc Làng Phù Đổng - No European well!)
+            // Authentic Vietnamese Ancient Stone Well (Giếng Ngọc Làng Phù Đổng)
             PhuDongAsianCultureBuilder.BuildAncientStoneWell(root);
         }
 
@@ -143,31 +166,30 @@ namespace ThanhGiong.Editor
             var root = CreateChild(env, "ChuongNgua_DongCo_LangViet");
             root.transform.position = new Vector3(10f, 0f, 2f);
 
-            // Rustic timber posts corral (Rào cọc gỗ mộc mạc làng quê)
-            var woodMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/_Game/Art/Materials/World/Wood.mat");
-            Vector3[] postPos = {
-                new Vector3(-4f, 0f, -4f), new Vector3(0f, 0f, -4f), new Vector3(4f, 0f, -4f),
-                new Vector3(4f, 0f, 0f), new Vector3(4f, 0f, 4f),
-                new Vector3(0f, 0f, 4f), new Vector3(-4f, 0f, 4f), new Vector3(-4f, 0f, 0f)
-            };
-            for (int i = 0; i < postPos.Length; i++)
+            var fenceAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_Fence01.glb");
+            if (fenceAsset != null)
             {
-                var post = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                post.name = $"CocRao_Go_{i + 1}";
-                post.transform.SetParent(root.transform, false);
-                post.transform.localPosition = postPos[i] + new Vector3(0f, 0.75f, 0f);
-                post.transform.localScale = new Vector3(0.18f, 0.75f, 0.18f);
-                if (woodMat != null) post.GetComponent<Renderer>().sharedMaterial = woodMat;
+                Vector3[] fPos = {
+                    new Vector3(-4f, 0f, -3.5f), new Vector3(0f, 0f, -3.5f), new Vector3(4f, 0f, -3.5f),
+                    new Vector3(4f, 0f, 3.5f), new Vector3(0f, 0f, 3.5f), new Vector3(-4f, 0f, 3.5f)
+                };
+                for (int i = 0; i < fPos.Length; i++)
+                {
+                    var f = (GameObject)PrefabUtility.InstantiatePrefab(fenceAsset, root.transform);
+                    f.name = $"RaoGo_Chuong_{i + 1}";
+                    f.transform.localPosition = fPos[i];
+                    f.transform.localScale = Vector3.one * 1.25f;
+                }
             }
 
-            // Real 3D Grazing Mount in pasture (Ngựa chiến gặm cỏ)
+            // Real 3D Grazing War Horse in pasture (No primitive capsules!)
             var horsePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(MountBase + "KayKit_Horse_Modular.prefab");
             if (horsePrefab != null)
             {
                 var horse = (GameObject)PrefabUtility.InstantiatePrefab(horsePrefab, root.transform);
                 horse.name = "NguaChien_LangGiong_GamCo";
-                horse.transform.localPosition = new Vector3(0f, 0f, 0.5f);
-                horse.transform.localRotation = Quaternion.Euler(0f, -45f, 0f);
+                horse.transform.localPosition = new Vector3(0.5f, 0f, 0f);
+                horse.transform.localRotation = Quaternion.Euler(0f, -50f, 0f);
                 horse.transform.localScale = Vector3.one * 1.55f;
             }
         }
@@ -282,14 +304,14 @@ namespace ThanhGiong.Editor
                 child.transform.rotation = Quaternion.Euler(0f, 120f, 0f);
             }
 
-            // Fisherman near the river pier
+            // Fisherman standing right on the river pier
             var fisherAsset = AssetDatabase.LoadAssetAtPath<GameObject>(VillagerBase + "Villager_Fisherman_Rigged.prefab");
             if (fisherAsset != null)
             {
                 var fisher = (GameObject)PrefabUtility.InstantiatePrefab(fisherAsset, root.transform);
                 fisher.name = "NguDan_BenDo";
-                fisher.transform.position = new Vector3(-4.2f, 0.12f, -14.2f); // Standing right on the wooden pier!
-                fisher.transform.rotation = Quaternion.Euler(0f, 160f, 0f);
+                fisher.transform.position = new Vector3(-1.5f, 0.08f, -13.2f);
+                fisher.transform.rotation = Quaternion.Euler(0f, 170f, 0f);
             }
         }
 

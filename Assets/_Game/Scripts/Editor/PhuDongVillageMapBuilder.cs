@@ -27,7 +27,7 @@ namespace ThanhGiong.Editor
             var game = CreateChild(root, "--- GAMEPLAY ---");
             var light = CreateChild(root, "--- LIGHTING & ATMOSPHERE ---");
 
-            // 1. Nature, Soaring Karsts, River, Docks & Vegetation
+            // 1. Nature, Soaring Karsts, Meandering River, Docks & Dense Wuxia Vegetation
             PhuDongVillageEnvironmentBuilder.BuildTerrainAndRoads(env);
             PhuDongVillageEnvironmentBuilder.BuildMountains(env);
             PhuDongVillageEnvironmentBuilder.BuildSkyAndClouds(env);
@@ -35,7 +35,7 @@ namespace ThanhGiong.Editor
             PhuDongVillageEnvironmentBuilder.BuildRiceTerraces(env);
             PhuDongVillageEnvironmentBuilder.BuildUndergrowthAndTrees(env);
 
-            // 2. Architecture, Living Villagers, Mounts
+            // 2. East Asian Architecture, Living Villagers, Mounts
             PhuDongVillageArchitectureBuilder.BuildStiltVillageAndFortress(arch);
             PhuDongVillageArchitectureBuilder.BuildBanyanStoneWell(arch);
             PhuDongVillageArchitectureBuilder.BuildPastureAndMounts(arch);
@@ -43,7 +43,7 @@ namespace ThanhGiong.Editor
             PhuDongVillageArchitectureBuilder.BuildIronForge(arch);
             PhuDongVillageArchitectureBuilder.BuildLivingVillagers(arch);
 
-            // 3. Gameplay Anchors & Lighting
+            // 3. Gameplay Anchors, Cinematic Atmosphere & Camera
             BuildGameplayAnchors(game);
             SetupAtmosphereAndLighting(light);
             SetupCinematicCamera();
@@ -80,7 +80,10 @@ namespace ThanhGiong.Editor
                     n.Contains("BauTroi_") || n.Contains("DongRuong_") || n.Contains("ThamThucVat_") ||
                     n.Contains("RungHoaDao_") || n.Contains("BenDo_") || n.Contains("DaDam_") ||
                     n.Contains("ThamCoLau_") || n.Contains("GiengNgoc_") || n.Contains("ChuongNgua_") ||
-                    n.Contains("RungTre_") || n.Contains("LoRenThep_") || n.Contains("DanLang_"))
+                    n.Contains("RungTre_") || n.Contains("LoRenThep_") || n.Contains("DanLang_") ||
+                    n.Contains("DinhLang_") || n.Contains("CayDa_") || n.Contains("CauGo_") ||
+                    n.Contains("DinhNui_") || n.Contains("VachDa_") || n.Contains("DamMay_") || n.Contains("cloud_") ||
+                    n.Contains("PlayerSpawnPoint") || n.Contains("EnemyWaveSpawners") || n.Contains("Trigger_NhoTre"))
                 {
                     Undo.DestroyObjectImmediate(go);
                 }
@@ -114,17 +117,17 @@ namespace ThanhGiong.Editor
             // Soft river mist / mountain atmosphere (Sương khói bồng bềnh thủy mặc)
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Linear;
-            RenderSettings.fogStartDistance = 32f;
-            RenderSettings.fogEndDistance = 145f;
-            RenderSettings.fogColor = new Color(0.72f, 0.82f, 0.88f);
+            RenderSettings.fogStartDistance = 28f;
+            RenderSettings.fogEndDistance = 150f;
+            RenderSettings.fogColor = new Color(0.74f, 0.84f, 0.90f);
 
             // Morning dawn golden sunlight with soft shadows
             var sun = new GameObject("MatTroi_BanMai_Sun");
             sun.transform.SetParent(parent.transform, false);
             var l = sun.AddComponent<Light>();
             l.type = LightType.Directional;
-            l.color = new Color(1f, 0.94f, 0.86f);
-            l.intensity = 1.08f;
+            l.color = new Color(1.0f, 0.95f, 0.88f);
+            l.intensity = 1.15f;
             l.shadows = LightShadows.Soft;
             sun.transform.rotation = Quaternion.Euler(34f, -32f, 0f);
         }
@@ -138,9 +141,9 @@ namespace ThanhGiong.Editor
                 if (camGo == null) camGo = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
                 cam = camGo.GetComponent<Camera>();
             }
-            // Positioned overlooking the river pier, peach blossom trees, wooden sampans, and towering karsts
-            cam.transform.position = new Vector3(-5f, 10f, -28f);
-            cam.transform.rotation = Quaternion.Euler(18f, 12f, 0f);
+            // Positioned overlooking the river dock, peach blossom trees, wooden boats, and towering karsts
+            cam.transform.position = new Vector3(-4f, 9.5f, -27f);
+            cam.transform.rotation = Quaternion.Euler(16f, 15f, 0f);
             cam.farClipPlane = 650f;
         }
 
