@@ -1,0 +1,39 @@
+# Unity temporary / cache directories
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Aa]ssets/AssetStoreTools*
+**/Library/
+**/Temp/
+**/Logs/
+**/UserSettings/
+**/Build/
+**/Builds/
+**/obj/
+
+# Visual Studio / Rider / IDE files
+.vs/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+.vsconfig
+
+# OS generated
+.DS_Store
+Thumbs.db
