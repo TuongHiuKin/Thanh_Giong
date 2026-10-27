@@ -1,0 +1,22 @@
+{
+    "name": "ThanhGiong.Runtime",
+    "rootNamespace": "ThanhGiong",
+    "references": [
+        "Unity.InputSystem",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.AI.Navigation",
+        "Unity.Cinemachine",
+        "Unity.Timeline",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+
