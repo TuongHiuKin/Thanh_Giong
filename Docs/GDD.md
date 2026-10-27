@@ -1,59 +1,59 @@
-# GDD – Thánh Gióng: Trận Chiến Phù Đổng
+# GDD – Thánh Gióng: Battle of Phù Đổng
 
-> Bản chép có cấu trúc từ tài liệu đề xuất trên Google Docs. Đây là nguồn sự thật cho AI và cả nhóm. Muốn đổi nội dung game thì sửa file này qua PR và ghi lý do vào `Docs/decisions/`.
-> Trạng thái: **concept, chờ nhóm chốt** (mục 8 của đề xuất gốc).
+> Structured copy of the proposal on Google Docs. This is the source of truth for the AI and the whole team. To change game content, edit this file through a PR and record the reason in `Docs/decisions/`.
+> Status: **concept, waiting for the team to finalize** (section 8 of the original proposal).
 
-## 1. Tổng quan
-- Tên tạm: Thánh Gióng – Trận Chiến Phù Đổng
-- Thể loại: 3D Third‑Person Arena Combat (khu vực giới hạn)
-- Engine: Unity · Đồ họa: Stylized / Low Poly 3D
-- Thời lượng: 5–10 phút · Thời gian phát triển: 5 tuần
+## 1. Overview
+- Working title: Thánh Gióng – Battle of Phù Đổng
+- Genre: 3D Third-Person Arena Combat (bounded area)
+- Engine: Unity · Art: Stylized / Low Poly 3D
+- Play time: 5–10 minutes · Development time: 5 weeks
 
-## 2. Cốt truyện trong game
-Thánh Gióng đã trưởng thành, ra trận đánh giặc Ân trên chiến trường gần làng Phù Đổng. Ban đầu dùng roi sắt. Sau vài đợt quân, roi sắt gãy như trong truyền thuyết; Gióng tới bụi tre cạnh chiến trường, nhổ tre làm vũ khí. Đánh tan đợt quân cuối thì thắng, kết thúc bằng cinematic ngắn.
+## 2. In-game story
+Thánh Gióng has grown up and rides out to fight the Ân invaders on a battlefield near Phù Đổng village. He starts with an iron whip. After several waves, the whip breaks as in the legend; Gióng goes to the bamboo grove beside the battlefield and pulls up a bamboo to use as his weapon. Defeating the final wave wins the game, ending with a short cinematic.
 
-## 3. Bốn giai đoạn
-| Phase | Tên | Nội dung | Kết thúc khi |
+## 3. Four phases
+| Phase | Name | Content | Ends when |
 | --- | --- | --- | --- |
-| 1 | Xuất trận | Làm quen di chuyển, camera, tấn công | Xong phần làm quen |
-| 2 | Chiến đấu bằng roi sắt | Đánh các đợt giặc Ân | Hết đợt cuối Phase 2 |
-| 3 | Roi sắt gãy | Sự kiện roi gãy, tìm tới bụi tre, nhổ tre | Nhổ được tre |
-| 4 | Tre ngà quật giặc | Đánh đợt quân cuối bằng tre | Hết đợt cuối → thắng + cinematic |
+| 1 | Deploy (Xuất trận) | Learn movement, camera, attacks | Tutorial part is done |
+| 2 | Iron whip combat (Chiến đấu bằng roi sắt) | Fight waves of Ân invaders | Last wave of Phase 2 is cleared |
+| 3 | The whip breaks (Roi sắt gãy) | Whip-break event, go to the bamboo grove, pull bamboo | Bamboo is pulled |
+| 4 | Bamboo strikes the invaders (Tre ngà quật giặc) | Defeat the final wave with bamboo | Final wave cleared → victory + cinematic |
 
-Thua: máu Gióng về 0 ở bất kỳ Phase nào → màn thua → chơi lại.
+Defeat: Gióng's health reaches 0 in any phase → defeat screen → restart.
 
-## 4. Cơ chế
-**Bắt buộc:** di chuyển WASD · camera góc nhìn thứ ba · tấn công bằng roi sắt · tấn công bằng tre · máu và sát thương · Enemy AI đuổi và tấn công · Wave System · tương tác nhổ tre · thắng/thua/chơi lại.
+## 4. Mechanics
+**Required:** WASD movement · third-person camera · iron whip attacks · bamboo attacks · health and damage · enemy AI that chases and attacks · Wave System · pull-bamboo interaction · win/lose/restart.
 
-**Stretch (nếu còn thời gian):** né (Dodge) · một mini‑boss · hiệu ứng đặc biệt.
+**Stretch (if time allows):** Dodge · one mini-boss · special effects.
 
-**Ngoài phạm vi:** cưỡi ngựa sắt · nhiều bản đồ · hệ thống nhiệm vụ lớn · skill tree · open world · làng lớn.
+**Out of scope:** riding the iron horse · multiple maps · large quest system · skill tree · open world · large village.
 
-## 5. Điều khiển (đề xuất, chờ chốt)
-| Phím | Hành động |
+## 5. Controls (proposed, to be finalized)
+| Key | Action |
 | --- | --- |
-| WASD | Di chuyển |
-| Chuột | Xoay camera |
-| Chuột trái | Tấn công |
-| E (giữ) | Tương tác / nhổ tre |
-| Space | Né (stretch) |
-| Esc | Tạm dừng |
+| WASD | Move |
+| Mouse | Rotate camera |
+| Left mouse | Attack |
+| E (hold) | Interact / pull bamboo |
+| Space | Dodge (stretch) |
+| Esc | Pause |
 
-## 6. Môi trường
-Một map chiến trường duy nhất: khu trung tâm để đánh, rừng tre cạnh chiến trường, vài nhà truyền thống Việt Nam ở xa, địa hình, cây cối, vật trang trí.
+## 6. Environment
+A single battlefield map: a central fighting area, a bamboo forest beside the battlefield, a few traditional Vietnamese houses in the distance, terrain, trees, and decorative props.
 
-## 7. Kế hoạch 5 tuần
-| Tuần | Mục tiêu |
+## 7. 5-week plan
+| Week | Goal |
 | --- | --- |
-| 1 | Prototype, điều khiển nhân vật, blockout map |
-| 2 | Chiến đấu cơ bản, máu, Enemy AI |
-| 3 | Wave System, sự kiện roi gãy, nhổ tre, điều kiện thắng |
-| 4 | Model 3D, animation, môi trường, UI, hiệu ứng |
-| 5 | Testing, sửa lỗi, hoàn thiện, build nộp |
+| 1 | Prototype, character controls, map blockout |
+| 2 | Basic combat, health, enemy AI |
+| 3 | Wave System, whip-break event, pulling bamboo, win condition |
+| 4 | 3D models, animation, environment, UI, effects |
+| 5 | Testing, bug fixing, polish, final build |
 
-## 8. Danh sách asset cần có (điền khi nhóm chốt)
-- Nhân vật: Thánh Gióng (rig humanoid), giặc Ân lính thường, (stretch) tướng giặc
-- Vũ khí: roi sắt, roi sắt gãy, cây tre
-- Môi trường: nền chiến trường, bụi/rừng tre, nhà truyền thống, cây, đá
-- Animation: Idle, Run, Attack combo (roi/tre), Hit, Die, Pull bamboo; địch: Idle, Run, Attack, Hit, Die
-- Âm thanh: nhạc nền chiến đấu, nhạc thắng, SFX đánh/trúng/gãy roi/nhổ tre
+## 8. Required assets (fill in once the team decides)
+- Characters: Thánh Gióng (humanoid rig), regular Ân soldier, (stretch) Ân general
+- Weapons: iron whip, broken iron whip, bamboo pole
+- Environment: battlefield ground, bamboo grove/forest, traditional houses, trees, rocks
+- Animation: Idle, Run, Attack combo (whip/bamboo), Hit, Die, Pull bamboo; enemies: Idle, Run, Attack, Hit, Die
+- Audio: battle music, victory music, SFX for swing/hit/whip break/pulling bamboo

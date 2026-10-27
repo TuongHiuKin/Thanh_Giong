@@ -1,63 +1,63 @@
-# Thánh Gióng – Trận Chiến Phù Đổng
+# Thánh Gióng – Battle of Phù Đổng
 
-File này là luật chung của cả nhóm và của mọi AI làm việc trong repo. Khi luật ở đây khác với yêu cầu trong một prompt, **hỏi lại người dùng trước khi làm**.
+This file holds the shared rules for the whole team and for every AI working in this repo. When a rule here conflicts with a prompt, **ask the user before doing anything**.
 
-Nguồn sự thật về nội dung game: `Docs/GDD.md`. Nếu một tính năng không có trong GDD, không làm.
+Source of truth for game content: `Docs/GDD.md`. If a feature is not in the GDD, do not build it.
 
-## 1. Game là gì (tóm tắt GDD)
+## 1. What the game is (GDD summary)
 
-- **Thể loại:** 3D Third-Person Arena Combat, một map chiến trường gần làng Phù Đổng.
-- **Đồ họa:** Stylized / Low Poly 3D.
-- **Thời lượng chơi:** 5–10 phút. **Thời gian làm:** 5 tuần.
-- **4 giai đoạn (Phase):**
-  1. `Phase1_XuatTran` – làm quen di chuyển, camera, đòn đánh.
-  2. `Phase2_RoiSat` – đánh các đợt giặc Ân bằng roi sắt.
-  3. `Phase3_RoiGay` – roi sắt gãy, người chơi đến bụi tre và nhổ tre.
-  4. `Phase4_TreNga` – đánh đợt cuối bằng tre, thắng, cinematic kết.
-- **Bắt buộc có:** WASD, camera góc ba, đòn roi sắt, đòn tre, máu/sát thương, enemy đuổi và đánh, Wave System, tương tác nhổ tre, thắng/thua/chơi lại.
-- **Chỉ làm khi còn thời gian (stretch):** né (Dodge), mini‑boss, hiệu ứng đặc biệt.
-- **KHÔNG làm (ngoài phạm vi):** ngựa sắt, nhiều map/nhiều màn, open world, góc nhìn isometric, hệ thống nhiệm vụ, skill tree, rèn đồ/thu thập tài nguyên, hạt giống/kỹ năng phụ, lưu game, NPC hội thoại. AI không được tự thêm các mục này, kể cả "chỉ là bản nhỏ".
+- **Genre:** 3D Third-Person Arena Combat on a single battlefield near Phù Đổng village.
+- **Art style:** Stylized / Low Poly 3D.
+- **Play time:** 5–10 minutes. **Development time:** 5 weeks.
+- **4 phases:**
+  1. `Phase1_Deploy` – learn movement, camera and attacks.
+  2. `Phase2_IronWhip` – fight waves of Ân invaders with the iron whip.
+  3. `Phase3_WhipBreak` – the iron whip breaks; the player goes to the bamboo grove and pulls up a bamboo.
+  4. `Phase4_Bamboo` – defeat the final wave with bamboo, win, closing cinematic.
+- **Must have:** WASD movement, third-person camera, iron whip attacks, bamboo attacks, health/damage, enemies that chase and attack, Wave System, pull-bamboo interaction, win/lose/restart.
+- **Stretch (only if time allows):** Dodge, a mini-boss, special effects.
+- **Out of scope (DO NOT build):** iron horse, multiple maps/levels, open world, isometric view, quest system, skill tree, crafting/resource gathering, seeds/secondary skills, save game, NPC dialogue. AI must not add any of these on its own, not even "a small version".
 
-## 2. Công nghệ (đã chốt, không tự đổi)
+## 2. Technology (locked, do not change on your own)
 
-| Mục | Giá trị |
+| Item | Value |
 | --- | --- |
-| Engine | Unity **6000.6.0f1** (ghi trong `ProjectSettings/ProjectVersion.txt`, cả nhóm cài đúng bản này) |
-| Render | URP 17.6, chỉ dùng `PC_RPAsset` |
-| Input | Input System 1.20, **Active Input Handling = Input System Package (New)**. Cấm `UnityEngine.Input.*` |
+| Engine | Unity **6000.6.0f1** (recorded in `ProjectSettings/ProjectVersion.txt`; everyone installs exactly this version) |
+| Rendering | URP 17.6, `PC_RPAsset` only |
+| Input | Input System 1.20, **Active Input Handling = Input System Package (New)**. `UnityEngine.Input.*` is forbidden |
 | Camera | Cinemachine 3.x (`CinemachineCamera` + Orbital Follow) |
-| AI di chuyển | AI Navigation 2.0 (NavMesh + `NavMeshAgent`) |
-| Cinematic | Timeline |
+| Enemy movement | AI Navigation 2.0 (NavMesh + `NavMeshAgent`) |
+| Cinematics | Timeline |
 | UI | uGUI + TextMeshPro |
-| Model ngoài | FBX; GLB qua glTFast 6.x nếu buộc phải dùng |
-| Nền tảng build | Windows x64 → `Builds/Windows/` (không commit) |
+| External models | FBX; GLB through glTFast 6.x only when unavoidable |
+| Build target | Windows x64 → `Builds/Windows/` (not committed) |
 
-Thêm, bỏ hoặc nâng cấp package phải được cả nhóm đồng ý và ghi vào `Docs/decisions/`. AI không được sửa `Packages/manifest.json` hay `ProjectSettings/` nếu người dùng không yêu cầu rõ.
+Adding, removing or upgrading a package needs the whole team's agreement and a note in `Docs/decisions/`. AI must not edit `Packages/manifest.json` or `ProjectSettings/` unless the user explicitly asks.
 
-## 3. Cấu trúc thư mục
+## 3. Folder structure
 
 ```
 Assets/
-  _Game/                      # mọi thứ nhóm tự làm nằm ở đây
+  _Game/                      # everything the team makes lives here
     Scripts/
       Runtime/                # asmdef: ThanhGiong.Runtime
-        Core/                 # GameFlow, PhaseId, event channel, helper chung
-        Player/               # di chuyển, máu, input của Gióng
+        Core/                 # GameFlow, PhaseId, event channels, shared helpers
+        Player/               # Gióng's movement, health, input
         Combat/               # Health, IDamageable, Hitbox/Hurtbox, DamageInfo
         Weapons/              # WeaponBase, IronWhip, Bamboo
         Enemies/              # EnemyController, state machine, EnemySpawner
         Waves/                # WaveDirector
-        Story/                # sự kiện roi gãy, BambooGrove, cinematic trigger
+        Story/                # whip-break event, BambooGrove, cinematic triggers
         UI/                   # HUD, Pause, Win/Lose, MainMenu
         Audio/  VFX/
-      Editor/                 # asmdef: ThanhGiong.Editor (chỉ tool editor)
-    Data/                     # ScriptableObject asset: Player/ Weapons/ Enemies/ Waves/ Phases/
+      Editor/                 # asmdef: ThanhGiong.Editor (editor tools only)
+    Data/                     # ScriptableObject assets: Player/ Weapons/ Enemies/ Waves/ Phases/
     Prefabs/                  # Player/ Enemies/ Weapons/ Environment/ UI/ VFX/
-    Scenes/                   # MainMenu.unity, ChienTruong.unity, Sandbox/<TênNgười>.unity
+    Scenes/                   # MainMenu.unity, Battlefield.unity, Sandbox/<PersonName>.unity
     Art/                      # Models/ Materials/ Textures/ Animations/
     Audio/                    # Music/ SFX/
     Timeline/
-  ThirdParty/                 # asset pack tải về, giữ nguyên, không sửa trực tiếp
+  ThirdParty/                 # downloaded asset packs, kept as-is, never edited directly
   Tests/
     EditMode/                 # asmdef: ThanhGiong.Tests.EditMode
     PlayMode/                 # asmdef: ThanhGiong.Tests.PlayMode
@@ -65,107 +65,107 @@ Docs/
   GDD.md  Glossary.md  decisions/  ASSET_CREDITS.md
 ```
 
-- Không tạo thư mục cấp cao mới trong `Assets/` ngoài 3 thư mục trên.
-- Không để script, tài liệu, file `.glb/.fbx` ở thư mục gốc repo.
-- Script chỉ dùng để kiểm thử/debug đặt trong `Tests/` hoặc `Scripts/Editor/`, không lẫn vào `Runtime/`.
+- Do not create new top-level folders in `Assets/` besides the three above.
+- Do not put scripts, docs, or `.glb/.fbx` files in the repo root.
+- Test/debug-only scripts go in `Tests/` or `Scripts/Editor/`, never mixed into `Runtime/`.
 
-## 4. Thuật ngữ (dùng thống nhất trong code, GDD, commit)
+## 4. Terminology (use consistently in code, GDD and commits)
 
-| Tiếng Việt | Tên trong code |
+| Vietnamese | Name in code |
 | --- | --- |
-| Thánh Gióng (người chơi) | `Player` / `Giong` |
-| Roi sắt | `IronWhip` |
-| Tre / tre ngà | `Bamboo` |
-| Bụi tre | `BambooGrove` |
-| Giặc Ân (lính thường) | `AnSoldier` |
-| Tướng giặc / mini‑boss | `AnGeneral` |
-| Đợt quân | `Wave` |
-| Giai đoạn | `Phase` |
-| Sự kiện roi gãy | `WhipBreakEvent` |
-| Nhổ tre | `PullBamboo` |
+| Thánh Gióng (the player) | `Player` / `Giong` |
+| Roi sắt (iron whip) | `IronWhip` |
+| Tre / tre ngà (bamboo) | `Bamboo` |
+| Bụi tre (bamboo grove) | `BambooGrove` |
+| Giặc Ân (regular soldier) | `AnSoldier` |
+| Tướng giặc (general / mini-boss) | `AnGeneral` |
+| Đợt quân (wave) | `Wave` |
+| Giai đoạn (phase) | `Phase` |
+| Roi gãy (whip breaks) | `WhipBreakEvent` |
+| Nhổ tre (pull bamboo) | `PullBamboo` |
 
-Thêm thuật ngữ mới thì cập nhật `Docs/Glossary.md` trong cùng PR.
+When adding a new term, update `Docs/Glossary.md` in the same PR.
 
-## 5. Kiến trúc
+## 5. Architecture
 
-- **GameFlow** (`Core/`) là state machine duy nhất điều khiển Phase: `Intro → Phase1 → Phase2 → Phase3 → Phase4 → Victory`, nhánh `Defeat` từ mọi Phase. Chuyển Phase chỉ qua `GameFlow.GoTo(PhaseId)`; hệ thống khác lắng nghe event `PhaseChanged`, không tự đổi Phase.
-- **Giao tiếp giữa hệ thống:** C# event hoặc ScriptableObject event channel (`VoidEventChannel`, `IntEventChannel`…). UI chỉ đọc/nghe, không gọi ngược vào gameplay.
-- **Tham chiếu:** dùng `[SerializeField] private` gán trong Inspector. Cấm singleton tự chế (`static Instance`) và `Find*`/`FindObjectOfType` ở runtime. Ngoại lệ duy nhất: không có.
-- **Sát thương:** mọi thứ nhận đòn implement `IDamageable` và có component `Health`. Vũ khí gây sát thương qua Hitbox (trigger) → `IDamageable.TakeDamage(DamageInfo)`.
-- **Vũ khí:** `WeaponBase` + `WeaponData` (SO). Roi sắt và tre là 2 asset dữ liệu + 2 prefab, đổi vũ khí qua `PlayerWeaponHolder.Equip(WeaponData)`.
-- **Kẻ địch:** `EnemyController` với state machine nhỏ (`Idle, Chase, Telegraph, Attack, Recover, Hurt, Dead`), chỉ số lấy từ `EnemyData`. Đối tượng địch lấy từ pool.
-- **Wave:** `WaveDirector` đọc danh sách `WaveData` của Phase hiện tại, sinh địch qua `EnemySpawner`, báo `WaveCleared` / `PhaseWavesCleared`.
-- **Animation chỉ để hiển thị**: logic sát thương/di chuyển không phụ thuộc vào việc clip có chạy hay không (Animation Event chỉ dùng để bật/tắt hitbox, có fallback theo thời gian).
+- **GameFlow** (`Core/`) is the only state machine that controls phases: `Intro → Phase1 → Phase2 → Phase3 → Phase4 → Victory`, with a `Defeat` branch from any phase. Phases change only through `GameFlow.GoTo(PhaseId)`; other systems listen to the `PhaseChanged` event and never change phase themselves.
+- **Communication between systems:** C# events or ScriptableObject event channels (`VoidEventChannel`, `IntEventChannel`, …). UI only reads/listens; it never calls back into gameplay.
+- **References:** use `[SerializeField] private` assigned in the Inspector. Home-made singletons (`static Instance`) and `Find*`/`FindObjectOfType` at runtime are forbidden. No exceptions.
+- **Damage:** everything that can be hit implements `IDamageable` and has a `Health` component. Weapons deal damage via a Hitbox (trigger) → `IDamageable.TakeDamage(DamageInfo)`.
+- **Weapons:** `WeaponBase` + `WeaponData` (SO). The iron whip and the bamboo are two data assets + two prefabs; switch weapons through `PlayerWeaponHolder.Equip(WeaponData)`.
+- **Enemies:** `EnemyController` with a small state machine (`Idle, Chase, Telegraph, Attack, Recover, Hurt, Dead`), stats come from `EnemyData`. Enemy objects come from a pool.
+- **Waves:** `WaveDirector` reads the `WaveData` list of the current phase, spawns enemies via `EnemySpawner`, and raises `WaveCleared` / `PhaseWavesCleared`.
+- **Animation is presentation only:** damage/movement logic must not depend on whether a clip plays (Animation Events only toggle hitboxes, with a time-based fallback).
 
-## 6. Quy ước code C#
+## 6. C# code conventions
 
-- Namespace `ThanhGiong.<Thư mục>` (vd `ThanhGiong.Enemies`). Một class chính mỗi file, tên file = tên class.
-- PascalCase cho class, method, property, event; `camelCase` cho biến cục bộ; field private dạng `_camelCase`; hằng số `PascalCase`.
-- Field hiện ra Inspector: `[SerializeField] private`, không `public` field.
-- **Không file nào quá 300 dòng.** Vượt thì tách class. Không dùng `partial` để né giới hạn này.
-- Cache `GetComponent` trong `Awake`. Không `Instantiate/Destroy` trong `Update`; địch, VFX, projectile đi qua pool (`UnityEngine.Pool.ObjectPool`).
-- Mọi giá trị cân bằng (máu, sát thương, tốc độ, cooldown, số địch) nằm trong ScriptableObject ở `Data/`, không hardcode trong code hay prefab.
-- Comment ngắn, tiếng Việt hoặc tiếng Anh đều được, nhưng giải thích **vì sao**, không kể lại code.
-- Không để lại `Debug.Log` spam; dùng `[Conditional("UNITY_EDITOR")]` hoặc xoá trước khi merge.
+- Namespace `ThanhGiong.<Folder>` (e.g. `ThanhGiong.Enemies`). One main class per file, file name = class name.
+- PascalCase for classes, methods, properties, events; `camelCase` for locals; private fields `_camelCase`; constants `PascalCase`.
+- Inspector fields: `[SerializeField] private`, no `public` fields.
+- **No file over 300 lines.** If it grows past that, split the class. Do not use `partial` to dodge this limit.
+- Cache `GetComponent` in `Awake`. No `Instantiate/Destroy` in `Update`; enemies, VFX and projectiles go through a pool (`UnityEngine.Pool.ObjectPool`).
+- Every balance value (health, damage, speed, cooldown, enemy count) lives in a ScriptableObject under `Data/`, never hardcoded in code or prefabs.
+- Keep comments short, in English, explaining **why**, not restating the code.
+- No `Debug.Log` spam; use `[Conditional("UNITY_EDITOR")]` or remove before merging.
 
-## 7. Scene và prefab
+## 7. Scenes and prefabs
 
-- Scene chính: `MainMenu.unity`, `ChienTruong.unity`. Mỗi lúc **chỉ một người** sửa scene chính; báo trong nhóm trước khi mở để sửa.
-- Thử nghiệm trong `Scenes/Sandbox/<TênNgười>.unity`, không commit thay đổi thử nghiệm vào scene chính.
-- Làm việc theo prefab: sửa prefab, không sửa instance trong scene rồi quên apply.
-- Mọi asset luôn đi kèm file `.meta`; không xoá/đổi tên asset bên ngoài Unity Editor.
+- Main scenes: `MainMenu.unity`, `Battlefield.unity`. **Only one person** edits a main scene at a time; tell the team before opening one to edit.
+- Experiment in `Scenes/Sandbox/<PersonName>.unity`; do not commit experimental changes into main scenes.
+- Work prefab-first: edit the prefab, do not edit the scene instance and forget to apply.
+- Every asset always has its `.meta` file; never delete/rename assets outside the Unity Editor.
 
 ## 8. Git
 
-- Mọi thao tác git làm theo skill `git-safe-operations`.
-- Nhánh `main` luôn mở được và chạy được. Không commit, không push (kể cả force) vào `main`.
-- Mỗi việc một nhánh mới, tên `<ten-nguoi>/<viec-da-lam>` (viết thường, không dấu), ví dụ `kien/them-dot-quan-phase2`. Merge qua Pull Request, cần 1 người duyệt.
-- Commit message: `<loại>: <mô tả ngắn>`, loại là `feat | fix | art | data | docs | refactor | test | chore`.
-- Model, texture, audio, video đi qua **Git LFS** (xem `.gitattributes`). Không commit file > 50 MB, không commit `Builds/`, `Library/`, file kết quả test.
-- AI không tự commit, push, merge hay tạo nhánh nếu người dùng không yêu cầu.
+- Follow the `git-safe-operations` skill for every git operation.
+- `main` must always open and run. Never commit or push (including force push) to `main`.
+- One task per new branch, named `<person-name>/<task-done>` (lowercase, no diacritics), e.g. `kien/add-phase2-waves`. Merge via Pull Request with 1 approving review.
+- Commit message: `<type>: <short description>`, where type is `feat | fix | art | data | docs | refactor | test | chore`.
+- Models, textures, audio and video go through **Git LFS** (see `.gitattributes`). Never commit files > 50 MB, `Builds/`, `Library/`, or test result files.
+- AI does not commit, push, merge or create branches unless the user asks.
 
-## 9. Giới hạn khi dùng AI
+## 9. AI limits
 
-AI **được** làm: viết/sửa script trong `Assets/_Game/Scripts`, tạo ScriptableObject data, viết test, viết tài liệu trong `Docs/`, đề xuất cách dựng prefab/scene.
+AI **may**: write/edit scripts in `Assets/_Game/Scripts`, create ScriptableObject data, write tests, write docs in `Docs/`, propose how to build prefabs/scenes.
 
-AI **phải hỏi trước** khi: sửa scene chính, sửa prefab dùng chung (Player, EnemyBase), đổi tên/di chuyển thư mục, xoá file, thay đổi hơn 5 file trong một lượt.
+AI **must ask first** before: editing a main scene, editing shared prefabs (Player, EnemyBase), renaming/moving folders, deleting files, changing more than 5 files in one go.
 
-AI **không được**:
-- Thêm tính năng ngoài GDD hoặc trong danh sách "KHÔNG làm" ở mục 1.
-- Cài package, sửa `ProjectSettings/`, đổi phiên bản Unity.
-- Cài thêm bộ agent/skill/hook "studio" hay framework quản lý dự án tự động.
-- Tạo script editor tự sinh scene/map/prefab hàng loạt (installer, builder, generator) nếu không được yêu cầu cụ thể.
-- Tải hoặc đưa vào repo asset không rõ giấy phép.
+AI **must not**:
+- Add features outside the GDD or on the "DO NOT build" list in section 1.
+- Install packages, edit `ProjectSettings/`, or change the Unity version.
+- Install extra "studio" agent/skill/hook bundles or automated project-management frameworks.
+- Create editor scripts that mass-generate scenes/maps/prefabs (installers, builders, generators) unless specifically asked.
+- Download or add assets with unclear licenses.
 
-Trước khi bắt đầu một việc lớn, chạy skill `kiem-tra-pham-vi` để đối chiếu với GDD.
+Before starting any large task, run the `scope-check` skill to compare it against the GDD.
 
-## 10. Kiểm thử và Definition of Done
+## 10. Testing and Definition of Done
 
-Một việc được coi là xong khi:
-1. Chạy được trong `ChienTruong.unity` từ đầu Phase liên quan, không có lỗi/cảnh báo đỏ trong Console.
-2. Logic thuần (sát thương, chuyển Phase, đếm wave) có EditMode test; luồng chính (thắng/thua) có PlayMode test.
-3. Giá trị cân bằng nằm trong SO, không hardcode.
-4. Thuật ngữ đúng mục 4, file đúng thư mục mục 3.
-5. PR mô tả: làm gì, thử thế nào, ảnh/gif nếu có thay đổi hình ảnh.
+A task is done when:
+1. It runs in `Battlefield.unity` from the start of the relevant phase with no errors/red warnings in the Console.
+2. Pure logic (damage, phase transitions, wave counting) has EditMode tests; the main flow (win/lose) has PlayMode tests.
+3. Balance values live in SOs, not hardcoded.
+4. Terms match section 4, files are in the folders from section 3.
+5. The PR describes what was done, how it was tested, and has screenshots/GIFs for visual changes.
 
-Mục tiêu hiệu năng: 60 FPS trên máy yếu nhất của nhóm với tối đa 20 địch cùng lúc.
+Performance target: 60 FPS on the team's weakest machine with up to 20 enemies at once.
 
-## 11. Asset và giấy phép
+## 11. Assets and licensing
 
-- Chỉ dùng asset CC0 / giấy phép cho phép dùng trong dự án học tập (Kenney, KayKit, Quaternius…) hoặc asset nhóm tự làm/tạo bằng AI mà nhóm có quyền dùng.
-- Mỗi asset ngoài ghi một dòng vào `Docs/ASSET_CREDITS.md`: tên, nguồn, giấy phép, người thêm.
-- Asset pack giữ nguyên trong `Assets/ThirdParty/<TênPack>/`; muốn chỉnh thì copy sang `_Game/`.
+- Use only CC0 assets / licenses allowing use in a student project (Kenney, KayKit, Quaternius…) or assets the team made or generated with AI and has the right to use.
+- Every external asset gets one line in `Docs/ASSET_CREDITS.md`: name, source, license, who added it.
+- Asset packs stay untouched in `Assets/ThirdParty/<PackName>/`; to modify one, copy it into `_Game/`.
 
-## 12. Skills của dự án (`.agents/skills/`)
+## 12. Project skills (`.agents/skills/`)
 
-| Skill | Dùng khi |
+| Skill | Use when |
 | --- | --- |
-| `kiem-tra-pham-vi` | trước một tính năng mới, để đối chiếu với GDD và lịch 5 tuần |
-| `tao-ke-dich` | thêm một loại giặc Ân mới |
-| `tao-dot-quan` | thêm hoặc chỉnh đợt quân trong một Phase |
-| `tao-vu-khi` | thêm/chỉnh vũ khí (roi sắt, tre) |
-| `them-su-kien-cot-truyen` | sự kiện kịch bản: roi gãy, nhổ tre, cinematic kết |
-| `tao-man-hinh-ui` | HUD, pause, thắng/thua, menu chính |
-| `git-safe-operations` | trước mọi lệnh commit, push, merge, rebase, reset, xoá nhánh |
+| `scope-check` | before a new feature, to compare it against the GDD and the 5-week schedule |
+| `create-enemy` | adding a new kind of Ân invader |
+| `create-wave` | adding or tuning waves in a phase |
+| `create-weapon` | adding/tuning weapons (iron whip, bamboo) |
+| `add-story-event` | story events: whip breaks, pulling bamboo, closing cinematic |
+| `create-ui-screen` | HUD, pause, win/lose, main menu |
+| `git-safe-operations` | before any commit, push, merge, rebase, reset, branch deletion |
 
-Mỗi skill là một thư mục riêng `.agents/skills/<ten-skill>/SKILL.md`. Đây là bản gốc duy nhất; nếu công cụ AI nào chỉ đọc thư mục khác (vd Claude Code đọc `.claude/skills/`) thì dùng symlink hoặc copy từ `.agents/skills/`, không sửa bản copy.
+Each skill is its own folder `.agents/skills/<skill-name>/SKILL.md`. This is the single source; if an AI tool only reads another folder (e.g. Claude Code reads `.claude/skills/`), symlink or copy from `.agents/skills/` and never edit the copy.

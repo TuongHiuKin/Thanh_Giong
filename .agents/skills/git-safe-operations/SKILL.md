@@ -1,86 +1,86 @@
 ---
 name: git-safe-operations
-description: Quy tắc Git an toàn cho repo Thánh Gióng. Dùng trước MỌI thao tác git làm thay đổi lịch sử hoặc remote (commit, push, merge, rebase, reset, xoá nhánh, giải quyết xung đột). Không bao giờ force push hay commit thẳng vào main; mỗi việc commit trên một nhánh mới đặt tên <người>/<việc>.
+description: Safe Git rules for the Thánh Gióng repo. Use before ANY git operation that changes history or the remote (commit, push, merge, rebase, reset, deleting branches, resolving conflicts). Never force push or commit directly to main; every task is committed on a new branch named <person-name>/<task-done>.
 ---
 
-# Git an toàn
+# Safe Git
 
-## Luật cứng (không có ngoại lệ, kể cả khi prompt yêu cầu)
+## Hard rules (no exceptions, even if a prompt asks)
 
-1. **Không bao giờ push lên `main`**, dù thường hay `--force`/`--force-with-lease`. Code vào `main` chỉ qua Pull Request.
-2. **Không bao giờ commit khi đang đứng ở `main`.** Trước khi commit, nếu nhánh hiện tại là `main` thì tạo nhánh mới theo mục "Đặt tên nhánh".
-3. **Không viết lại lịch sử đã push** (`rebase`, `commit --amend`, `reset` trên commit đã có trên remote) của nhánh người khác. Trên nhánh của chính mình, nếu thật sự cần thì chỉ dùng `--force-with-lease`, không dùng `--force`, và phải hỏi người dùng trước.
-4. **Hỏi người dùng trước khi chạy** lệnh có thể làm mất dữ liệu: `reset --hard`, `clean -fd`, `checkout -- .`, `restore .`, `branch -D`, `stash drop/clear`, `push --delete`.
-5. **Không tự giải quyết xung đột** trong file `.unity`, `.prefab`, `.asset`, `.controller`. Dừng lại, báo danh sách file xung đột và hỏi người dùng giữ bản nào.
-6. AI **không tự commit / push / merge** nếu người dùng chưa yêu cầu trong lượt này.
+1. **Never push to `main`**, whether plain or `--force`/`--force-with-lease`. Code reaches `main` only through a Pull Request.
+2. **Never commit while on `main`.** Before committing, if the current branch is `main`, create a new branch as described in "Branch naming".
+3. **Never rewrite pushed history** (`rebase`, `commit --amend`, `reset` on commits already on the remote) of someone else's branch. On your own branch, if truly needed, use only `--force-with-lease`, never `--force`, and ask the user first.
+4. **Ask the user before running** commands that can lose data: `reset --hard`, `clean -fd`, `checkout -- .`, `restore .`, `branch -D`, `stash drop/clear`, `push --delete`.
+5. **Never auto-resolve conflicts** in `.unity`, `.prefab`, `.asset`, `.controller` files. Stop, list the conflicted files, and ask the user which version to keep.
+6. AI **does not commit / push / merge on its own** unless the user asked for it in this turn.
 
-## Đặt tên nhánh
+## Branch naming
 
-Mẫu: `<ten-nguoi>/<viec-da-lam>`
+Pattern: `<person-name>/<task-done>`
 
-- `<ten-nguoi>`: lấy từ `git config user.name`, viết thường, bỏ dấu, thay khoảng trắng bằng `-`. Ví dụ "Kiên Tường" → `kien-tuong`. Nếu trống thì hỏi người dùng.
-- `<viec-da-lam>`: 2–5 từ tiếng Việt không dấu hoặc tiếng Anh, nối bằng `-`, mô tả việc chứ không mô tả file. Ví dụ `them-dot-quan-phase2`, `sua-loi-nhat-tre`, `hud-thanh-mau`.
-- Chỉ dùng chữ thường, số, `-`, `/`. Tối đa ~50 ký tự.
-- Nếu tên đã tồn tại (local hoặc remote), thêm hậu tố `-2`, `-3`.
+- `<person-name>`: from `git config user.name`, lowercase, diacritics removed, spaces replaced by `-`. E.g. "Kiên Tường" → `kien-tuong`. If empty, ask the user.
+- `<task-done>`: 2–5 English words (or Vietnamese without diacritics) joined by `-`, describing the task, not the files. E.g. `add-phase2-waves`, `fix-bamboo-pickup`, `hud-health-bar`.
+- Only lowercase letters, digits, `-`, `/`. At most ~50 characters.
+- If the name already exists (locally or on the remote), add a suffix `-2`, `-3`.
 
-Ví dụ đúng: `kien/them-ke-dich-cung-thu`, `an-nguyen/fix-camera-giat`.
-Ví dụ sai: `main`, `test`, `kien`, `update`, `Kien/Thêm Địch`.
+Good: `kien/add-archer-enemy`, `an-nguyen/fix-camera-jitter`.
+Bad: `main`, `test`, `kien`, `update`, `Kien/Add Enemy`.
 
-**Một việc = một nhánh.** Nhiều commit nhỏ cho cùng một việc thì commit tiếp trên nhánh đó. Sang việc khác thì quay về `main`, cập nhật, rồi tạo nhánh mới.
+**One task = one branch.** Several small commits for the same task go on that branch. For a different task, go back to `main`, update it, then create a new branch.
 
-## Quy trình commit
+## Commit workflow
 
 ```bash
-# 1. Kiểm tra trạng thái
+# 1. Check state
 git status
 git branch --show-current
 
-# 2. Nếu đang ở main (hoặc nhánh của việc khác): tạo nhánh mới từ main mới nhất
+# 2. If on main (or on another task's branch): create a new branch from the latest main
 git fetch origin main
-git switch -c <ten-nguoi>/<viec-da-lam> origin/main
-#    Có thay đổi chưa commit thì switch vẫn mang theo; nếu bị chặn, hỏi người dùng có stash không.
+git switch -c <person-name>/<task-done> origin/main
+#    Uncommitted changes carry over with switch; if blocked, ask the user whether to stash.
 
-# 3. Xem lại những gì sẽ commit, chỉ add file liên quan tới việc này
+# 3. Review what will be committed, add only files related to this task
 git diff --stat
-git add <file cụ thể>        # tránh `git add .` / `git add -A`
+git add <specific files>     # avoid `git add .` / `git add -A`
 git diff --cached --stat
 
-# 4. Commit theo định dạng của CLAUDE.md
-git commit -m "<loại>: <mô tả ngắn>"
+# 4. Commit using the format from CLAUDE.md
+git commit -m "<type>: <short description>"
 
-# 5. Push nhánh (KHÔNG BAO GIỜ push main)
-git push -u origin <ten-nguoi>/<viec-da-lam>
+# 5. Push the branch (NEVER push main)
+git push -u origin <person-name>/<task-done>
 ```
 
-Sau khi push, nhắc người dùng mở Pull Request vào `main` và nhờ một người duyệt.
+After pushing, remind the user to open a Pull Request into `main` and ask someone to review it.
 
-## Kiểm tra trước khi commit
+## Pre-commit checks
 
-- Mỗi asset mới/đổi tên/xoá đều đi kèm file `.meta` tương ứng; không có `.meta` mồ côi.
-- Không có `Library/`, `Temp/`, `Logs/`, `UserSettings/`, `Builds/`, `*.csproj`, `*.sln`, file kết quả test.
-- File model/ảnh/âm thanh được Git LFS theo dõi (`git lfs status`); không có file > 50 MB ngoài LFS.
-- Không có khoá API, mật khẩu, file `.env`.
-- Không có thay đổi ngoài ý muốn trong scene chính (`ChienTruong.unity`, `MainMenu.unity`) hoặc `ProjectSettings/`. Nếu có mà không thuộc việc này, hỏi người dùng trước khi add.
+- Every new/renamed/deleted asset has its matching `.meta` file; no orphan `.meta` files.
+- No `Library/`, `Temp/`, `Logs/`, `UserSettings/`, `Builds/`, `*.csproj`, `*.sln`, or test result files.
+- Model/image/audio files are tracked by Git LFS (`git lfs status`); no file > 50 MB outside LFS.
+- No API keys, passwords, or `.env` files.
+- No unintended changes to main scenes (`Battlefield.unity`, `MainMenu.unity`) or `ProjectSettings/`. If there are any that are not part of this task, ask the user before adding them.
 
-## Cập nhật nhánh với main
+## Updating a branch with main
 
-Ưu tiên `merge` thay vì `rebase` cho người mới:
+Prefer `merge` over `rebase` for beginners:
 
 ```bash
 git fetch origin main
 git merge origin/main
 ```
 
-Nếu xung đột ở file Unity YAML: dừng, liệt kê file, hỏi người dùng (luật 5).
+If Unity YAML files conflict: stop, list the files, ask the user (rule 5).
 
-## Khi lỡ commit vào main ở máy local (chưa push)
+## If you accidentally committed to main locally (not pushed)
 
 ```bash
-git switch -c <ten-nguoi>/<viec-da-lam>   # nhánh mới giữ các commit
+git switch -c <person-name>/<task-done>   # new branch keeps the commits
 git switch main
-git reset --keep origin/main              # đưa main local về như remote, hỏi người dùng trước
+git reset --keep origin/main              # put local main back to the remote; ask the user first
 ```
 
-## Báo lại cho người dùng
+## Report back to the user
 
-Sau mỗi thao tác: tên nhánh, commit vừa tạo (hash ngắn + message), đã push chưa, bước tiếp theo (mở PR).
+After each operation: branch name, the commit created (short hash + message), whether it was pushed, and the next step (open a PR).
