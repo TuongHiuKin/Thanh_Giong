@@ -4,8 +4,8 @@ using UnityEngine;
 namespace ThanhGiong.Editor
 {
     /// <summary>
-    /// Builds village stilt houses, communal yard, stone well, iron forge, bamboo groves,
-    /// fenced pasture with horse mount, and living Vietnamese villagers.
+    /// Builds village stilt houses, communal yard, ancient stone well, iron forge, bamboo groves,
+    /// and living Vietnamese villagers.
     /// </summary>
     public static class PhuDongVillageArchitectureBuilder
     {
@@ -124,35 +124,18 @@ namespace ThanhGiong.Editor
             var root = CreateChild(env, "CayDa_GiengNuoc_CoDai");
             root.transform.position = new Vector3(-17f, 0f, 8f);
 
-            // Grand Ancient Banyan Tree
+            // Grand Ancient Banyan Tree (Cây Đa Cổ Thụ Ngàn Năm)
             var banyanPrefab = LoadPrefab("Meshy_CayDaCoThu_LangViet.prefab");
             if (banyanPrefab != null)
             {
                 var banyan = (GameObject)PrefabUtility.InstantiatePrefab(banyanPrefab, root.transform);
                 banyan.name = "CayDaCoThu_LangViet";
                 banyan.transform.localPosition = new Vector3(-2f, 0f, 2f);
-                banyan.transform.localScale = Vector3.one * 1.25f;
+                banyan.transform.localScale = Vector3.one * 1.3f;
             }
 
-            // Real 3D Ancient Stone Well from KayKit (NOT primitive!)
-            var wellAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "buildings/blue/building_well_blue.fbx");
-            if (wellAsset != null)
-            {
-                var well = (GameObject)PrefabUtility.InstantiatePrefab(wellAsset, root.transform);
-                well.name = "GiengNuoc_DaCo";
-                well.transform.localPosition = new Vector3(3.5f, 0f, -2f);
-                well.transform.localRotation = Quaternion.Euler(0f, 45f, 0f);
-                well.transform.localScale = Vector3.one * 3.4f;
-            }
-
-            var bucketAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/props/bucket_water.fbx");
-            if (bucketAsset != null)
-            {
-                var b = (GameObject)PrefabUtility.InstantiatePrefab(bucketAsset, root.transform);
-                b.name = "GauNuoc_Go";
-                b.transform.localPosition = new Vector3(4.8f, 0f, -1.8f);
-                b.transform.localScale = Vector3.one * 2.5f;
-            }
+            // Authentic Vietnamese Ancient Stone Well (Giếng Ngọc Làng Phù Đổng - No European well!)
+            PhuDongAsianCultureBuilder.BuildAncientStoneWell(root);
         }
 
         public static void BuildPastureAndMounts(GameObject env)
@@ -160,38 +143,24 @@ namespace ThanhGiong.Editor
             var root = CreateChild(env, "ChuongNgua_DongCo_LangViet");
             root.transform.position = new Vector3(10f, 0f, 2f);
 
-            // Wooden pasture fences (NOT primitive cubes!)
-            var fenceAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "buildings/neutral/fence_wood_straight.fbx");
-            var fenceGate = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "buildings/neutral/fence_wood_straight_gate.fbx");
-
-            if (fenceAsset != null)
+            // Rustic timber posts corral (Rào cọc gỗ mộc mạc làng quê)
+            var woodMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/_Game/Art/Materials/World/Wood.mat");
+            Vector3[] postPos = {
+                new Vector3(-4f, 0f, -4f), new Vector3(0f, 0f, -4f), new Vector3(4f, 0f, -4f),
+                new Vector3(4f, 0f, 0f), new Vector3(4f, 0f, 4f),
+                new Vector3(0f, 0f, 4f), new Vector3(-4f, 0f, 4f), new Vector3(-4f, 0f, 0f)
+            };
+            for (int i = 0; i < postPos.Length; i++)
             {
-                // North fence
-                var fN = (GameObject)PrefabUtility.InstantiatePrefab(fenceAsset, root.transform);
-                fN.transform.localPosition = new Vector3(0f, 0f, 4f);
-                fN.transform.localScale = new Vector3(3.5f, 2.5f, 2.5f);
-
-                // South fence
-                var fS = (GameObject)PrefabUtility.InstantiatePrefab(fenceAsset, root.transform);
-                fS.transform.localPosition = new Vector3(0f, 0f, -4f);
-                fS.transform.localScale = new Vector3(3.5f, 2.5f, 2.5f);
-
-                // East fence
-                var fE = (GameObject)PrefabUtility.InstantiatePrefab(fenceAsset, root.transform);
-                fE.transform.localPosition = new Vector3(4f, 0f, 0f);
-                fE.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-                fE.transform.localScale = new Vector3(3.5f, 2.5f, 2.5f);
-            }
-            if (fenceGate != null)
-            {
-                // West fence with gate entrance
-                var fW = (GameObject)PrefabUtility.InstantiatePrefab(fenceGate, root.transform);
-                fW.transform.localPosition = new Vector3(-4f, 0f, 0f);
-                fW.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-                fW.transform.localScale = new Vector3(3.5f, 2.5f, 2.5f);
+                var post = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                post.name = $"CocRao_Go_{i + 1}";
+                post.transform.SetParent(root.transform, false);
+                post.transform.localPosition = postPos[i] + new Vector3(0f, 0.75f, 0f);
+                post.transform.localScale = new Vector3(0.18f, 0.75f, 0.18f);
+                if (woodMat != null) post.GetComponent<Renderer>().sharedMaterial = woodMat;
             }
 
-            // Real 3D Grazing Mount in pasture (REPLACING primitive capsule/cube buffalo!)
+            // Real 3D Grazing Mount in pasture (Ngựa chiến gặm cỏ)
             var horsePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(MountBase + "KayKit_Horse_Modular.prefab");
             if (horsePrefab != null)
             {
@@ -313,14 +282,14 @@ namespace ThanhGiong.Editor
                 child.transform.rotation = Quaternion.Euler(0f, 120f, 0f);
             }
 
-            // Fisherman near the river bridge
+            // Fisherman near the river pier
             var fisherAsset = AssetDatabase.LoadAssetAtPath<GameObject>(VillagerBase + "Villager_Fisherman_Rigged.prefab");
             if (fisherAsset != null)
             {
                 var fisher = (GameObject)PrefabUtility.InstantiatePrefab(fisherAsset, root.transform);
-                fisher.name = "NguDan_BenSong";
-                fisher.transform.position = new Vector3(3.5f, 0.05f, -17f);
-                fisher.transform.rotation = Quaternion.Euler(0f, 195f, 0f);
+                fisher.name = "NguDan_BenDo";
+                fisher.transform.position = new Vector3(-4.2f, 0.12f, -14.2f); // Standing right on the wooden pier!
+                fisher.transform.rotation = Quaternion.Euler(0f, 160f, 0f);
             }
         }
 
@@ -334,4 +303,3 @@ namespace ThanhGiong.Editor
         }
     }
 }
-

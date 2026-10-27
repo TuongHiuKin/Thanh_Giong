@@ -5,8 +5,8 @@ using UnityEngine;
 namespace ThanhGiong.Editor
 {
     /// <summary>
-    /// Builds environment geometry, architecture, rivers, mountains, foliage, and living villagers
-    /// for the ancient Vietnamese Phù Đổng Village.
+    /// Builds environment geometry, soaring karst mountains, winding river, rice terraces,
+    /// and lush East Asian wuxia foliage.
     /// </summary>
     public static class PhuDongVillageEnvironmentBuilder
     {
@@ -14,28 +14,26 @@ namespace ThanhGiong.Editor
         private const string MatBase = "Assets/_Game/Art/Materials/";
         private const string OpenWorldBase = "Assets/_Game/Art/OpenWorld/";
         private const string KayKitBase = "Assets/ThirdParty/KayKit_Medieval_Hexagon_Pack/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx/";
-        private const string VillagerBase = "Assets/_Game/Art/Villagers/Rigged/";
-        private const string MountBase = "Assets/_Game/Prefabs/Mounts/";
 
         public static void BuildTerrainAndRoads(GameObject env)
         {
             var root = CreateChild(env, "DiaHinh_Va_DuongLang");
 
-            // 1. Author continuous undulating BotW-style meadow terrain
+            // Continuous undulating meadow terrain with BotW shader
             var groundMesh = AssetDatabase.LoadAssetAtPath<Mesh>(OpenWorldBase + "ContinuousGround.asset");
             var groundMat = AssetDatabase.LoadAssetAtPath<Material>(OpenWorldBase + "BiomeGround.mat");
             if (groundMesh != null)
             {
                 var terrainGo = new GameObject("ThungLung_ContinuousGround_700m");
                 terrainGo.transform.SetParent(root.transform, false);
-                terrainGo.transform.position = new Vector3(-55f, 0f, 0f); // Center village on Phù Đổng hub
+                terrainGo.transform.position = new Vector3(-55f, 0f, 0f);
                 terrainGo.AddComponent<MeshFilter>().sharedMesh = groundMesh;
                 var mr = terrainGo.AddComponent<MeshRenderer>();
                 if (groundMat != null) mr.sharedMaterial = groundMat;
                 terrainGo.AddComponent<MeshCollider>().sharedMesh = groundMesh;
             }
 
-            // 2. Cobblestone earthen village path
+            // Earthen road with cobblestones
             var roadMesh = AssetDatabase.LoadAssetAtPath<Mesh>(OpenWorldBase + "Road_VillageMainPath_PhuDong.asset");
             var roadMat = AssetDatabase.LoadAssetAtPath<Material>(OpenWorldBase + "ZeldaRoadEarth.mat");
             if (roadMesh != null)
@@ -51,40 +49,8 @@ namespace ThanhGiong.Editor
 
         public static void BuildMountains(GameObject env)
         {
-            var root = CreateChild(env, "DayNui_SocSon_BaoBoc");
-            string[] mtnFiles = { "mountain_A.fbx", "mountain_B.fbx", "mountain_C.fbx", "hills_A_trees.fbx" };
-            var cliffPrefab = LoadPrefab("Meshy_DaNui_RungThieng.prefab");
-
-            int count = 24;
-            float radius = 78f;
-
-            for (int i = 0; i < count; i++)
-            {
-                float ang = i * Mathf.PI * 2f / count;
-                float dist = radius + (i % 3) * 6f;
-                Vector3 pos = new Vector3(Mathf.Cos(ang) * dist, 0f, Mathf.Sin(ang) * dist);
-
-                if (i % 4 == 0 && cliffPrefab != null)
-                {
-                    var cliff = (GameObject)PrefabUtility.InstantiatePrefab(cliffPrefab, root.transform);
-                    cliff.name = $"VachDaThieng_{i + 1}";
-                    cliff.transform.position = pos;
-                    cliff.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-                    cliff.transform.localScale = Vector3.one * Random.Range(4f, 6.5f);
-                    continue;
-                }
-
-                string file = mtnFiles[i % mtnFiles.Length];
-                var mtnAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/" + file);
-                if (mtnAsset == null) continue;
-
-                var mtn = (GameObject)PrefabUtility.InstantiatePrefab(mtnAsset, root.transform);
-                mtn.name = $"DinhNui_Cao_{i + 1}";
-                mtn.transform.position = pos;
-                mtn.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-                float s = Random.Range(65f, 95f);
-                mtn.transform.localScale = new Vector3(s, s * 1.2f, s);
-            }
+            // Soaring karst limestone pinnacles (Ninh Binh / Wuxia style)
+            PhuDongAsianCultureBuilder.BuildSoaringKarstPillars(env);
         }
 
         public static void BuildSkyAndClouds(GameObject env)
@@ -118,17 +84,17 @@ namespace ThanhGiong.Editor
             var root = CreateChild(env, "DongSong_CauGo_DamSen");
             var waterMat = LoadMat("Meshy/Environment/Mat_DongSong_NuocBiec.mat");
 
-            // Winding river flowing through the village (width 80m x 8m)
+            // Broad serene river (85m x 15m) with jade turquoise Zelda water shader
             var river = GameObject.CreatePrimitive(PrimitiveType.Cube);
             river.name = "DongSong_SuoiLangGiong";
             river.transform.SetParent(root.transform, false);
             river.transform.position = new Vector3(0f, 0.05f, -15.5f);
-            river.transform.localScale = new Vector3(85f, 0.08f, 7.5f);
+            river.transform.localScale = new Vector3(88f, 0.08f, 10.5f);
             var riverCol = river.GetComponent<Collider>();
             if (riverCol != null) Object.DestroyImmediate(riverCol);
             if (waterMat != null) river.GetComponent<Renderer>().sharedMaterial = waterMat;
 
-            // Grand wooden bridge across the river on the main road
+            // Two covered wooden bridges (Cầu gỗ cổ mái ngói)
             var bridgePrefab = LoadPrefab("Meshy_CauGo_CoDai.prefab");
             if (bridgePrefab != null)
             {
@@ -145,44 +111,42 @@ namespace ThanhGiong.Editor
                 b2.transform.localScale = new Vector3(1.8f, 1f, 1.6f);
             }
 
-            // Lotus Pond
+            // Ancient Lotus Pond (Đầm sen cổ Văn Lang)
             var lotusPrefab = LoadPrefab("Meshy_DamSenCo_VanLang.prefab");
             if (lotusPrefab != null)
             {
                 var lotus = (GameObject)PrefabUtility.InstantiatePrefab(lotusPrefab, root.transform);
                 lotus.name = "DamSenCo_VanLang";
                 lotus.transform.position = new Vector3(22f, 0.06f, -15.5f);
-                lotus.transform.localScale = Vector3.one * 1.25f;
+                lotus.transform.localScale = Vector3.one * 1.35f;
             }
+
+            // Stepping stones across the lotus pond (Đá dặm bước như Nghịch Thủy Hàn ảnh 2 & 3)
+            PhuDongAsianCultureBuilder.BuildLotusSteppingStones(root);
+
+            // River dock, wooden sampans, cart, and pottery jars (Bến đò & thuyền nan như ảnh 1 & 2)
+            PhuDongAsianCultureBuilder.BuildRiverDockAndSampans(root);
 
             // River shoreline details: rocks, water lilies, reeds
             var rockA = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/rock_single_A.fbx");
             var lilyA = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/waterlily_A.fbx");
-            var reedA = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/waterplant_A.fbx");
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 14; i++)
             {
-                float x = -35f + i * 6.5f;
+                float x = -36f + i * 5.5f;
                 if (rockA != null)
                 {
                     var rk = (GameObject)PrefabUtility.InstantiatePrefab(rockA, root.transform);
                     rk.name = $"DaBoSong_{i + 1}";
-                    rk.transform.position = new Vector3(x, 0.08f, (i % 2 == 0) ? -12f : -19.2f);
+                    rk.transform.position = new Vector3(x, 0.08f, (i % 2 == 0) ? -10.5f : -20.5f);
                     rk.transform.localScale = Vector3.one * Random.Range(2.2f, 4f);
                 }
                 if (lilyA != null && i % 2 == 0)
                 {
                     var lily = (GameObject)PrefabUtility.InstantiatePrefab(lilyA, root.transform);
                     lily.name = $"HoaSen_{i + 1}";
-                    lily.transform.position = new Vector3(x + 2f, 0.12f, -15.5f + Random.Range(-2f, 2f));
+                    lily.transform.position = new Vector3(x + 1.8f, 0.12f, -15.5f + Random.Range(-3f, 3f));
                     lily.transform.localScale = Vector3.one * 2.2f;
-                }
-                if (reedA != null)
-                {
-                    var reed = (GameObject)PrefabUtility.InstantiatePrefab(reedA, root.transform);
-                    reed.name = $"LauSayBoSong_{i + 1}";
-                    reed.transform.position = new Vector3(x - 1.5f, 0.1f, (i % 2 == 0) ? -12.4f : -18.6f);
-                    reed.transform.localScale = Vector3.one * 2.4f;
                 }
             }
         }
@@ -242,7 +206,14 @@ namespace ThanhGiong.Editor
 
         public static void BuildUndergrowthAndTrees(GameObject env)
         {
-            var root = CreateChild(env, "ThamThucVat_RungXanh_CoHoa");
+            // 1. Peach Blossom Trees (Cây Đào Hồng Cổ Thụ & Cánh hoa đào rơi bay)
+            PhuDongAsianCultureBuilder.BuildPeachBlossomGroves(env);
+
+            // 2. Dense 3D Ground Cover & White Pampas Reeds (Thảm cỏ lau trắng như ảnh 4)
+            PhuDongAsianCultureBuilder.BuildDenseVegetationAndPampas(env);
+
+            // 3. Ancient Banyan & Forest Trees
+            var root = CreateChild(env, "ThamThucVat_CayCoThu");
             var bushPrefab = LoadPrefab("Foliage/FoliageCluster_Undergrowth_Wild.prefab");
             var treeA = LoadPrefab("Foliage/TreeCluster_LayeredCanopy_Grand.prefab");
             var treeB = LoadPrefab("Foliage/TreeCluster_Broadleaf_Oak.prefab");
@@ -299,4 +270,3 @@ namespace ThanhGiong.Editor
         }
     }
 }
-

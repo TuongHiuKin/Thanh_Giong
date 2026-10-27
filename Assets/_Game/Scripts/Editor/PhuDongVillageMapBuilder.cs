@@ -7,7 +7,7 @@ namespace ThanhGiong.Editor
 {
     /// <summary>
     /// Master orchestrator for constructing the living, cinematic AAA ancient Vietnamese
-    /// Phù Đổng Village landscape in Unity.
+    /// Phù Đổng Village landscape in Unity (Nghịch Thủy Hàn / Wuxia East Asian style).
     /// </summary>
     public static class PhuDongVillageMapBuilder
     {
@@ -27,7 +27,7 @@ namespace ThanhGiong.Editor
             var game = CreateChild(root, "--- GAMEPLAY ---");
             var light = CreateChild(root, "--- LIGHTING & ATMOSPHERE ---");
 
-            // 1. Nature & Terrain
+            // 1. Nature, Soaring Karsts, River, Docks & Vegetation
             PhuDongVillageEnvironmentBuilder.BuildTerrainAndRoads(env);
             PhuDongVillageEnvironmentBuilder.BuildMountains(env);
             PhuDongVillageEnvironmentBuilder.BuildSkyAndClouds(env);
@@ -49,7 +49,7 @@ namespace ThanhGiong.Editor
             SetupCinematicCamera();
 
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            Debug.Log("[ThanhGiong] AAA Living Phu Dong Village successfully reconstructed!");
+            Debug.Log("[ThanhGiong] Wuxia East Asian Living Phu Dong Village successfully constructed!");
         }
 
         [MenuItem("Thanh Giong/Create and Save Village Scene")]
@@ -63,7 +63,7 @@ namespace ThanhGiong.Editor
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.CopyAsset(ScenePath, SandboxPath);
             AssetDatabase.Refresh();
-            Debug.Log($"[ThanhGiong] Saved AAA village scene to {ScenePath} and {SandboxPath}");
+            Debug.Log($"[ThanhGiong] Saved Wuxia AAA village scene to {ScenePath} and {SandboxPath}");
         }
 
         private static void ClearExistingObjects()
@@ -77,7 +77,10 @@ namespace ThanhGiong.Editor
                     n.Contains("ThamCo_") || n.Contains("ThungLung_") || n.Contains("DiaHinh_") ||
                     n.Contains("Directional Light") || n.Contains("MatTroi_") || n.Contains("DirectionalLight") ||
                     n.Contains("KhuLang_") || n.Contains("DayNui_") || n.Contains("DongSong_") ||
-                    n.Contains("BauTroi_") || n.Contains("DongRuong_") || n.Contains("ThamThucVat_"))
+                    n.Contains("BauTroi_") || n.Contains("DongRuong_") || n.Contains("ThamThucVat_") ||
+                    n.Contains("RungHoaDao_") || n.Contains("BenDo_") || n.Contains("DaDam_") ||
+                    n.Contains("ThamCoLau_") || n.Contains("GiengNgoc_") || n.Contains("ChuongNgua_") ||
+                    n.Contains("RungTre_") || n.Contains("LoRenThep_") || n.Contains("DanLang_"))
                 {
                     Undo.DestroyObjectImmediate(go);
                 }
@@ -108,20 +111,22 @@ namespace ThanhGiong.Editor
 
         private static void SetupAtmosphereAndLighting(GameObject parent)
         {
+            // Soft river mist / mountain atmosphere (Sương khói bồng bềnh thủy mặc)
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Linear;
-            RenderSettings.fogStartDistance = 50f;
-            RenderSettings.fogEndDistance = 180f;
-            RenderSettings.fogColor = new Color(0.72f, 0.80f, 0.82f);
+            RenderSettings.fogStartDistance = 32f;
+            RenderSettings.fogEndDistance = 145f;
+            RenderSettings.fogColor = new Color(0.72f, 0.82f, 0.88f);
 
+            // Morning dawn golden sunlight with soft shadows
             var sun = new GameObject("MatTroi_BanMai_Sun");
             sun.transform.SetParent(parent.transform, false);
             var l = sun.AddComponent<Light>();
             l.type = LightType.Directional;
             l.color = new Color(1f, 0.94f, 0.86f);
-            l.intensity = 1.05f;
+            l.intensity = 1.08f;
             l.shadows = LightShadows.Soft;
-            sun.transform.rotation = Quaternion.Euler(32f, -28f, 0f);
+            sun.transform.rotation = Quaternion.Euler(34f, -32f, 0f);
         }
 
         private static void SetupCinematicCamera()
@@ -133,9 +138,10 @@ namespace ThanhGiong.Editor
                 if (camGo == null) camGo = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
                 cam = camGo.GetComponent<Camera>();
             }
-            cam.transform.position = new Vector3(0f, 12f, -28f);
-            cam.transform.rotation = Quaternion.Euler(18f, 0f, 0f);
-            cam.farClipPlane = 600f; // Ensure towering mountains and sky are visible in frame!
+            // Positioned overlooking the river pier, peach blossom trees, wooden sampans, and towering karsts
+            cam.transform.position = new Vector3(-5f, 10f, -28f);
+            cam.transform.rotation = Quaternion.Euler(18f, 12f, 0f);
+            cam.farClipPlane = 650f;
         }
 
         private static void EnsureDir(string path)
