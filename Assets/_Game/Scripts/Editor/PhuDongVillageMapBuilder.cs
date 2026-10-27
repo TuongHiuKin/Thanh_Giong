@@ -8,6 +8,7 @@ namespace ThanhGiong.Editor
 {
     /// <summary>
     /// Builds a sprawling, highly authentic AAA-inspired ancient Vietnamese Phù Đổng Village map.
+    /// Completely clears any duplicate or legacy test objects before building.
     /// Features: Contoured mountain valley, dynamic drifting 3D clouds, procedural sky,
     /// natural lake with lotus and waterlilies, realistic terraced rice paddies, traditional stilt houses,
     /// stone well under giant banyan, resting water buffalo, and dense bamboo forests.
@@ -19,11 +20,13 @@ namespace ThanhGiong.Editor
         private const string PrefabBase = "Assets/_Game/Prefabs/Environment/";
         private const string MatBase = "Assets/_Game/Art/Materials/";
         private const string NatureBase = "Assets/ThirdParty/KayKit_Medieval_Hexagon_Pack/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx/decoration/nature/";
-        private const string ModelBase = "Assets/_Game/Art/Models/Environment/";
 
-        [MenuItem("Thanh Giong/Build Phu Dong Village Map")]
+        [MenuItem("Thanh Giong/Build Phu Dong Village Map (Clean Rebuild)")]
         public static void BuildMapInActiveScene()
         {
+            // 1. Purge all legacy environment objects, duplicate lights and hockey-puck cylinders
+            ClearExistingObjects();
+
             var root = new GameObject("PhuDong_Village_Environment");
             Undo.RegisterCreatedObjectUndo(root, "Build Phu Dong Village Map");
 
@@ -43,15 +46,16 @@ namespace ThanhGiong.Editor
 
             BuildGameplayAnchors(game);
             SetupAtmosphereAndLighting(light);
-            SetupCinematicCamera(root);
+            SetupCinematicCamera();
 
-            Debug.Log("[ThanhGiong] AAA Phu Dong Village map successfully constructed!");
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            Debug.Log("[ThanhGiong] Clean AAA Phu Dong Village map successfully constructed!");
         }
 
         [MenuItem("Thanh Giong/Create and Save Village Scene")]
         public static void CreateAndSaveScene()
         {
-            var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             BuildMapInActiveScene();
 
             EnsureDir(ScenePath);
@@ -62,24 +66,41 @@ namespace ThanhGiong.Editor
             Debug.Log($"[ThanhGiong] Saved AAA village scene to {ScenePath} and {SandboxPath}");
         }
 
+        private static void ClearExistingObjects()
+        {
+            var all = Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+            foreach (var go in all)
+            {
+                if (go == null) continue;
+                string n = go.name;
+                if (n.Contains("PhuDong_Village") || n.Contains("Arena_") || n.Contains("San_Lang") ||
+                    n.Contains("ThamCo_") || n.Contains("ThungLung_") || n.Contains("DiaHinh_") ||
+                    n.Contains("Directional Light") || n.Contains("MatTroi_") || n.Contains("DirectionalLight"))
+                {
+                    Undo.DestroyObjectImmediate(go);
+                }
+            }
+        }
+
         private static void BuildValleyTerrainAndPaths(GameObject parent)
         {
             var root = CreateChild(parent, "DiaHinh_ThungLung_PhuDong");
             var grassMat = LoadMat("World/GrassDark.mat");
             var roadMat = LoadMat("World/Road.mat");
 
-            var baseTerrain = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            baseTerrain.name = "ThungLung_CoXanh_Base";
-            baseTerrain.transform.SetParent(root.transform);
-            baseTerrain.transform.position = Vector3.zero;
-            baseTerrain.transform.localScale = new Vector3(14f, 1f, 14f); // 140m x 140m
-            if (grassMat != null) baseTerrain.GetComponent<Renderer>().sharedMaterial = grassMat;
+            // Broad 140m valley floor
+            var baseMeadow = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            baseMeadow.name = "ThungLung_CoXanh_Base";
+            baseMeadow.transform.SetParent(root.transform);
+            baseMeadow.transform.position = Vector3.zero;
+            baseMeadow.transform.localScale = new Vector3(14f, 1f, 14f);
+            if (grassMat != null) baseMeadow.GetComponent<Renderer>().sharedMaterial = grassMat;
 
-            // Organic meandering dirt paths
+            // Natural winding road
             Vector3[] pathPoints = {
                 new Vector3(0f, 0.04f, -22f), new Vector3(-2f, 0.04f, -12f),
-                new Vector3(0f, 0.04f, 0f), new Vector3(4f, 0.04f, 12f),
-                new Vector3(-2f, 0.04f, 24f)
+                new Vector3(0f, 0.04f, 0f), new Vector3(3f, 0.04f, 11f),
+                new Vector3(-1f, 0.04f, 22f)
             };
             for (int i = 0; i < pathPoints.Length - 1; i++)
             {
@@ -90,7 +111,7 @@ namespace ThanhGiong.Editor
                 Vector3 d = pathPoints[i + 1] - pathPoints[i];
                 seg.transform.position = mid;
                 seg.transform.rotation = Quaternion.LookRotation(d);
-                seg.transform.localScale = new Vector3(4.5f, 0.04f, d.magnitude + 0.4f);
+                seg.transform.localScale = new Vector3(4.2f, 0.04f, d.magnitude + 0.4f);
                 if (roadMat != null) seg.GetComponent<Renderer>().sharedMaterial = roadMat;
             }
         }
@@ -153,7 +174,7 @@ namespace ThanhGiong.Editor
             waterRoot.transform.position = new Vector3(22f, 0f, -14f);
             var waterMat = LoadMat("World/Water.mat");
 
-            // Natural organic lake basin
+            // Reflective lake basin
             var lakeSurface = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             lakeSurface.name = "MatNuoc_HoSen_PhuDong";
             lakeSurface.transform.SetParent(waterRoot.transform);
@@ -161,7 +182,6 @@ namespace ThanhGiong.Editor
             lakeSurface.transform.localScale = new Vector3(32f, 0.05f, 24f);
             if (waterMat != null) lakeSurface.GetComponent<Renderer>().sharedMaterial = waterMat;
 
-            // Ancient lotus pond asset
             var lotusPrefab = LoadPrefab("Meshy_DamSenCo_VanLang.prefab");
             if (lotusPrefab != null)
             {
@@ -172,7 +192,6 @@ namespace ThanhGiong.Editor
                 lotus.transform.localScale = Vector3.one * 1.3f;
             }
 
-            // Wooden Bridge spanning the lake
             var bridgePrefab = LoadPrefab("Meshy_CauGo_CoDai.prefab");
             if (bridgePrefab != null)
             {
@@ -184,7 +203,6 @@ namespace ThanhGiong.Editor
                 bridge.transform.localScale = Vector3.one * 1.1f;
             }
 
-            // Water lilies & reeds along shore
             var lilyAsset = AssetDatabase.LoadAssetAtPath<GameObject>(NatureBase + "waterlily_A.fbx");
             var reedAsset = AssetDatabase.LoadAssetAtPath<GameObject>(NatureBase + "waterplant_A.fbx");
             for (int i = 0; i < 6; i++)
@@ -218,7 +236,6 @@ namespace ThanhGiong.Editor
             var waterMat = LoadMat("World/Water.mat");
             var cropMat = LoadMat("World/Farm_Crops.mat");
 
-            // 3 wide cascading terraces
             for (int t = 0; t < 3; t++)
             {
                 float elevation = t * 0.45f;
@@ -226,7 +243,6 @@ namespace ThanhGiong.Editor
                 var terrace = CreateChild(paddyRoot, $"ThuaRuong_Bac_{t + 1}");
                 terrace.transform.localPosition = new Vector3(x, elevation, 0f);
 
-                // Curved earthen berm
                 var berm = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 berm.name = "BoRuong_DatSet";
                 berm.transform.SetParent(terrace.transform);
@@ -234,7 +250,6 @@ namespace ThanhGiong.Editor
                 berm.transform.localScale = new Vector3(5.8f, 0.45f, 26f);
                 if (soilMat != null) berm.GetComponent<Renderer>().sharedMaterial = soilMat;
 
-                // Still reflective water
                 var water = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 water.name = "MatNuoc_RuongLua";
                 water.transform.SetParent(terrace.transform);
@@ -242,7 +257,6 @@ namespace ThanhGiong.Editor
                 water.transform.localScale = new Vector3(5.2f, 0.05f, 25f);
                 if (waterMat != null) water.GetComponent<Renderer>().sharedMaterial = waterMat;
 
-                // Agricultural rows of rice sprouts
                 for (int z = -10; z <= 10; z += 2)
                 {
                     for (int off = -1; off <= 1; off += 2)
@@ -263,7 +277,6 @@ namespace ThanhGiong.Editor
             var village = CreateChild(parent, "KhuLang_NhaSan_PhuDong");
             var housePrefab = LoadPrefab("Meshy_NhaTranh_LangGiong.prefab");
 
-            // Cluster of traditional stilt houses
             Vector3[] housePos = { new Vector3(-3f, 0f, 24f), new Vector3(12f, 0f, 26f), new Vector3(-16f, 0f, 20f) };
             float[] houseRot = { 180f, 160f, 195f };
             float[] houseScale = { 1.25f, 1.1f, 1.15f };
@@ -281,7 +294,6 @@ namespace ThanhGiong.Editor
                 }
             }
 
-            // Gate & Flags
             var gatePrefab = LoadPrefab("Meshy_CongLang_ChienLuy.prefab");
             if (gatePrefab != null)
             {
@@ -321,7 +333,6 @@ namespace ThanhGiong.Editor
             var woodMat = LoadMat("World/Wood.mat");
             var waterMat = LoadMat("World/Water.mat");
 
-            // Giant Banyan Tree
             var banyanPrefab = LoadPrefab("Meshy_CayDaCoThu_LangViet.prefab");
             if (banyanPrefab != null)
             {
@@ -332,7 +343,6 @@ namespace ThanhGiong.Editor
                 banyan.transform.localScale = Vector3.one * 1.25f;
             }
 
-            // Authentic Stone Well under the banyan
             var well = CreateChild(area, "GiengNuoc_DaOng");
             well.transform.localPosition = new Vector3(3f, 0f, -2f);
 
@@ -350,7 +360,6 @@ namespace ThanhGiong.Editor
             water.transform.localScale = new Vector3(2.4f, 0.05f, 2.4f);
             if (waterMat != null) water.GetComponent<Renderer>().sharedMaterial = waterMat;
 
-            // Wooden bucket gallows
             var post1 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             post1.transform.SetParent(well.transform);
             post1.transform.localPosition = new Vector3(-1.3f, 1.2f, 0f);
@@ -393,7 +402,6 @@ namespace ThanhGiong.Editor
             var buffalo = CreateChild(pasture, "ConTrau_NghiNgoi");
             buffalo.transform.localRotation = Quaternion.Euler(0f, -40f, 0f);
 
-            // Anatomy: Torso, neck, head, curved horns
             var torso = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             torso.name = "Than_Trau";
             torso.transform.SetParent(buffalo.transform);
@@ -426,7 +434,6 @@ namespace ThanhGiong.Editor
             hornR.transform.localScale = new Vector3(0.13f, 0.6f, 0.13f);
             if (hornMat != null) hornR.GetComponent<Renderer>().sharedMaterial = hornMat;
 
-            // Multi-tiered layered haystack
             var haystack = CreateChild(pasture, "DunRom_Vang");
             haystack.transform.localPosition = new Vector3(3.2f, 0f, 2.5f);
             var hayBase = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -467,7 +474,6 @@ namespace ThanhGiong.Editor
                 b.transform.localScale = Vector3.one * (1.2f + (i % 3) * 0.2f);
             }
 
-            // Sacred Bamboo Grove for Phase 3
             var sacred = CreateChild(grove, "KhomTre_LinhThieng_Phase3");
             sacred.transform.position = new Vector3(-18f, 0f, -4f);
             var glow = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -478,7 +484,6 @@ namespace ThanhGiong.Editor
             var auraMat = LoadMat("Characters/SelectionRing.mat");
             if (auraMat != null) glow.GetComponent<Renderer>().sharedMaterial = auraMat;
 
-            // Falling leaves particles
             var pfxPrefab = LoadPrefab("Foliage/PFX_Forest_DriftingLeaves.prefab");
             if (pfxPrefab != null)
             {
@@ -536,11 +541,16 @@ namespace ThanhGiong.Editor
             if (prof != null) vol.sharedProfile = prof;
         }
 
-        private static void SetupCinematicCamera(GameObject root)
+        private static void SetupCinematicCamera()
         {
-            var cam = GameObject.Find("Main Camera");
-            if (cam == null) cam = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
-            cam.transform.position = new Vector3(0f, 9.5f, -22f);
+            var cam = Camera.main;
+            if (cam == null)
+            {
+                var camGo = GameObject.Find("Main Camera");
+                if (camGo == null) camGo = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
+                cam = camGo.GetComponent<Camera>();
+            }
+            cam.transform.position = new Vector3(0f, 10f, -25f);
             cam.transform.rotation = Quaternion.Euler(20f, 0f, 0f);
         }
 
