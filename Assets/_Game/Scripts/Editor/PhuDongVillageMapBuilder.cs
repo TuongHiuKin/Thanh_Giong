@@ -117,19 +117,25 @@ namespace ThanhGiong.Editor
             // Soft river mist / mountain atmosphere (Sương khói bồng bềnh thủy mặc)
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Linear;
-            RenderSettings.fogStartDistance = 28f;
-            RenderSettings.fogEndDistance = 150f;
-            RenderSettings.fogColor = new Color(0.74f, 0.84f, 0.90f);
+            RenderSettings.fogStartDistance = 25f;
+            RenderSettings.fogEndDistance = 165f;
+            RenderSettings.fogColor = new Color(0.75f, 0.84f, 0.90f);
 
-            // Morning dawn golden sunlight with soft shadows
+            // Three-color ambient lighting for rich wuxia atmospheric depth
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = new Color(0.86f, 0.92f, 0.98f);
+            RenderSettings.ambientEquatorColor = new Color(0.74f, 0.84f, 0.70f);
+            RenderSettings.ambientGroundColor = new Color(0.38f, 0.32f, 0.22f);
+
+            // Warm golden sunlight with soft shadows
             var sun = new GameObject("MatTroi_BanMai_Sun");
             sun.transform.SetParent(parent.transform, false);
             var l = sun.AddComponent<Light>();
             l.type = LightType.Directional;
-            l.color = new Color(1.0f, 0.95f, 0.88f);
-            l.intensity = 1.15f;
+            l.color = new Color(1.0f, 0.95f, 0.86f);
+            l.intensity = 1.25f;
             l.shadows = LightShadows.Soft;
-            sun.transform.rotation = Quaternion.Euler(34f, -32f, 0f);
+            sun.transform.rotation = Quaternion.Euler(32f, 142f, 0f);
         }
 
         private static void SetupCinematicCamera()
@@ -142,9 +148,18 @@ namespace ThanhGiong.Editor
                 cam = camGo.GetComponent<Camera>();
             }
             // Positioned overlooking the river dock, peach blossom trees, wooden boats, and towering karsts
-            cam.transform.position = new Vector3(-4f, 9.5f, -27f);
-            cam.transform.rotation = Quaternion.Euler(16f, 15f, 0f);
+            cam.transform.position = new Vector3(-6f, 3.8f, -20.5f);
+            cam.transform.rotation = Quaternion.Euler(9f, 22f, 0f);
+            cam.fieldOfView = 56f;
             cam.farClipPlane = 650f;
+
+            if (SceneView.lastActiveSceneView != null)
+            {
+                SceneView.lastActiveSceneView.pivot = new Vector3(0f, 2.0f, 4f);
+                SceneView.lastActiveSceneView.rotation = Quaternion.Euler(14f, 18f, 0f);
+                SceneView.lastActiveSceneView.size = 32f;
+                SceneView.lastActiveSceneView.Repaint();
+            }
         }
 
         private static void EnsureDir(string path)

@@ -59,7 +59,7 @@ namespace ThanhGiong.Editor
                 t2.transform.position = new Vector3(12f, 0f, 32f);
             }
 
-            // 3. Authentic East Asian Communal Drum Pavilion & Bell Tower (Replacing garish red hex gazebo)
+            // 3. Authentic East Asian Communal Drum Pavilion & Bell Tower
             BuildCommunalDrumPavilion(root);
 
             // 4. Outdoor traditional wooden lanterns along the main village avenue
@@ -96,64 +96,35 @@ namespace ThanhGiong.Editor
 
         private static void BuildCommunalDrumPavilion(GameObject parent)
         {
-            var pavilion = CreateChild(parent, "DinhLang_LauTrong_PhuDong");
-            pavilion.transform.position = new Vector3(5.5f, 0f, 13.5f);
+            var pavilion = CreateChild(parent, "DinhLang_SanDinh_PhuDong");
+            pavilion.transform.position = new Vector3(6.5f, 0f, 14f);
+            pavilion.transform.rotation = Quaternion.Euler(0f, -25f, 0f);
 
-            var drumAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_Drum.glb");
-            var bellAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_BellStructure.glb");
-            var baseAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_BuildingBase.glb");
-            var roofAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "lunar-year_RoomRoof.glb");
-
-            // Elevated pavilion base (Natural human scale ~8.5m x 12.8m)
-            if (baseAsset != null)
+            // Authentic Vietnamese Communal Courtyard with Sacred Dong Son Bronze Drum
+            var sanDinhPrefab = LoadPrefab("Meshy_SanDinh_TrongDong.prefab");
+            if (sanDinhPrefab != null)
             {
-                var b = (GameObject)PrefabUtility.InstantiatePrefab(baseAsset, pavilion.transform);
-                b.name = "SanNen_Dinh";
-                b.transform.localPosition = Vector3.zero;
-                b.transform.localScale = new Vector3(0.55f, 0.45f, 0.55f);
-            }
-
-            // Traditional Upturned Tiled Roof
-            if (roofAsset != null)
-            {
-                var r = (GameObject)PrefabUtility.InstantiatePrefab(roofAsset, pavilion.transform);
-                r.name = "MaiNgoi_DinhLang";
-                r.transform.localPosition = new Vector3(0f, 3.2f, 0f);
-                r.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
-            }
-
-            // Traditional Bronze/Leather Battle Drum on pedestal (~1.7m tall)
-            if (drumAsset != null)
-            {
-                var drum = (GameObject)PrefabUtility.InstantiatePrefab(drumAsset, pavilion.transform);
-                drum.name = "TrongDong_TranThanh";
-                drum.transform.localPosition = new Vector3(0f, 0.45f, 0f);
-                drum.transform.localScale = Vector3.one * 0.9f;
-            }
-
-            // Sacred Bell Structure beside pavilion
-            if (bellAsset != null)
-            {
-                var bell = (GameObject)PrefabUtility.InstantiatePrefab(bellAsset, pavilion.transform);
-                bell.name = "GiaChuong_DongCo";
-                bell.transform.localPosition = new Vector3(4.2f, 0f, 1.2f);
-                bell.transform.localScale = Vector3.one * 0.9f;
+                var s = (GameObject)PrefabUtility.InstantiatePrefab(sanDinhPrefab, pavilion.transform);
+                s.name = "SanDinh_TrongDong_PhuDong";
+                s.transform.localPosition = Vector3.zero;
+                s.transform.localScale = Vector3.one * 1.1f;
             }
         }
 
         public static void BuildBanyanStoneWell(GameObject env)
         {
             var root = CreateChild(env, "CayDa_GiengNuoc_CoDai");
-            root.transform.position = new Vector3(-17f, 0f, 8f);
+            root.transform.position = new Vector3(-16f, 0f, 8f);
 
-            // Majestic Ancient Shaded Tree (Replacing ugly yellow tree with lush organic canopy)
-            var treeAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "avatar-garden_Tree03.glb")
-                         ?? AssetDatabase.LoadAssetAtPath<GameObject>(PrefabBase + "Foliage/TreeCluster_Broadleaf_Oak.prefab");
-            if (treeAsset != null)
+            // Magnificent Vietnamese Ancient Banyan Tree shading the well
+            var banyanPrefab = LoadPrefab("Meshy_CayDaCoThu_LangViet.prefab")
+                            ?? LoadPrefab("Meshy/Environment/Meshy_CayDaCoThu_LangViet.prefab")
+                            ?? AssetDatabase.LoadAssetAtPath<GameObject>(PrefabBase + "Foliage/TreeCluster_Broadleaf_Oak.prefab");
+            if (banyanPrefab != null)
             {
-                var tree = (GameObject)PrefabUtility.InstantiatePrefab(treeAsset, root.transform);
+                var tree = (GameObject)PrefabUtility.InstantiatePrefab(banyanPrefab, root.transform);
                 tree.name = "CayDaCoThu_BongMat";
-                tree.transform.localPosition = new Vector3(-2.5f, 0f, 2f);
+                tree.transform.localPosition = new Vector3(-2.0f, 0f, 2.5f);
                 tree.transform.localScale = Vector3.one * 1.85f;
             }
 
@@ -182,7 +153,7 @@ namespace ThanhGiong.Editor
                 }
             }
 
-            // Real 3D Grazing War Horse in pasture (No primitive capsules!)
+            // Real 3D Grazing War Horse in pasture
             var horsePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(MountBase + "KayKit_Horse_Modular.prefab");
             if (horsePrefab != null)
             {
@@ -196,48 +167,8 @@ namespace ThanhGiong.Editor
 
         public static void BuildBambooGroves(GameObject env)
         {
-            var root = CreateChild(env, "RungTre_LuyLang_PhuDong");
-            var bambooPrefab = LoadPrefab("Meshy_KhomTreNga_ThanThanh.prefab");
-            var foliagePrefab = LoadPrefab("Foliage/BambooGrove_Vietnamese_Legend.prefab");
-
-            Vector3[] pos = {
-                new Vector3(-24f, 0f, -16f), new Vector3(-26f, 0f, -8f),
-                new Vector3(-25f, 0f, 0f), new Vector3(-23f, 0f, 8f),
-                new Vector3(-19f, 0f, 19f), new Vector3(-11f, 0f, -25f),
-                new Vector3(0f, 0f, -27f), new Vector3(11f, 0f, -27f),
-                new Vector3(23f, 0f, -23f), new Vector3(28f, 0f, -10f)
-            };
-
-            for (int i = 0; i < pos.Length; i++)
-            {
-                var asset = (i % 2 == 0 && bambooPrefab != null) ? bambooPrefab : foliagePrefab;
-                if (asset == null) continue;
-                var b = (GameObject)PrefabUtility.InstantiatePrefab(asset, root.transform);
-                b.name = $"RangTre_PhuDong_{i + 1}";
-                b.transform.position = pos[i];
-                b.transform.rotation = Quaternion.Euler(0f, i * 42f, 0f);
-                b.transform.localScale = Vector3.one * (1.2f + (i % 3) * 0.2f);
-            }
-
-            // Sacred Bamboo Grove for Phase 3
-            var sacred = CreateChild(root, "KhomTre_LinhThieng_Phase3");
-            sacred.transform.position = new Vector3(-18f, 0f, -4f);
-            var glow = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            glow.name = "HaoQuang_TreThan";
-            glow.transform.SetParent(sacred.transform, false);
-            glow.transform.localPosition = new Vector3(0f, 2.2f, 0f);
-            glow.transform.localScale = Vector3.one * 0.7f;
-            var auraMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/_Game/Art/Materials/Characters/SelectionRing.mat");
-            if (auraMat != null) glow.GetComponent<Renderer>().sharedMaterial = auraMat;
-
-            // Falling bamboo leaves VFX
-            var pfxPrefab = LoadPrefab("Foliage/PFX_Forest_DriftingLeaves.prefab");
-            if (pfxPrefab != null)
-            {
-                var pfx = (GameObject)PrefabUtility.InstantiatePrefab(pfxPrefab, root.transform);
-                pfx.name = "VFX_LaTre_RoiBay";
-                pfx.transform.position = new Vector3(-17f, 3.5f, -4f);
-            }
+            // Dense living bamboo hedge walls & sacred Phase 3 thicket (Reference Image 2)
+            PhuDongAsianCultureBuilder.BuildDenseBambooWallAndGroves(env);
         }
 
         public static void BuildIronForge(GameObject env)
