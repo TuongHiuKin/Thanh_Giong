@@ -148,16 +148,16 @@ namespace ThanhGiong.Editor
                 cam = camGo.GetComponent<Camera>();
             }
             // Positioned overlooking the river dock, peach blossom trees, wooden boats, and towering karsts
-            cam.transform.position = new Vector3(-6f, 3.8f, -20.5f);
-            cam.transform.rotation = Quaternion.Euler(9f, 22f, 0f);
-            cam.fieldOfView = 56f;
+            cam.transform.position = new Vector3(-8f, 7.5f, -22f);
+            cam.transform.rotation = Quaternion.Euler(14f, 24f, 0f);
+            cam.fieldOfView = 58f;
             cam.farClipPlane = 650f;
 
             if (SceneView.lastActiveSceneView != null)
             {
-                SceneView.lastActiveSceneView.pivot = new Vector3(0f, 2.0f, 4f);
-                SceneView.lastActiveSceneView.rotation = Quaternion.Euler(14f, 18f, 0f);
-                SceneView.lastActiveSceneView.size = 32f;
+                SceneView.lastActiveSceneView.pivot = new Vector3(0f, 3.0f, 6f);
+                SceneView.lastActiveSceneView.rotation = Quaternion.Euler(15f, 20f, 0f);
+                SceneView.lastActiveSceneView.size = 36f;
                 SceneView.lastActiveSceneView.Repaint();
             }
         }

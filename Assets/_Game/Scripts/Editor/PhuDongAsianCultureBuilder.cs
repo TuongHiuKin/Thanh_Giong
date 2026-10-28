@@ -120,8 +120,7 @@ namespace ThanhGiong.Editor
 
             Vector3[] lotusPos = {
                 new Vector3(17.5f, -0.05f, -14.0f),
-                new Vector3(-8.5f, -0.05f, -16.2f),
-                new Vector3(25.0f, -0.05f, -16.5f)
+                new Vector3(26.0f, -0.05f, -16.5f)
             };
 
             for (int i = 0; i < lotusPos.Length; i++)
@@ -216,24 +215,21 @@ namespace ThanhGiong.Editor
         public static void BuildMossyRockGrassClusters(GameObject parent)
         {
             var root = CreateChild(parent, "CumDaCuoi_BoSong_MocCo");
-            var rockA = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "tomb-chaser-2_Rock01_Art.glb")
-                     ?? AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/rock_single_A.fbx");
-            var rockB = AssetDatabase.LoadAssetAtPath<GameObject>(AsianBase + "tomb-chaser-2_Rock02_Art.glb")
-                     ?? AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/rock_single_B.fbx");
+            var rockA = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/rock_single_A.fbx");
+            var rockB = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/rock_single_B.fbx");
             var grassTuftAsset = AssetDatabase.LoadAssetAtPath<GameObject>(KayKitBase + "decoration/nature/waterplant_A.fbx");
-            var stoneMat = AssetDatabase.LoadAssetAtPath<Material>(OpenWorldBase + "MountainRock.mat")
-                        ?? AssetDatabase.LoadAssetAtPath<Material>(OpenWorldBase + "HighlandRock.mat")
-                        ?? AssetDatabase.LoadAssetAtPath<Material>(MatBase + "World/Stone.mat");
+            var stoneMat = AssetDatabase.LoadAssetAtPath<Material>(MatBase + "World/Stone.mat")
+                        ?? AssetDatabase.LoadAssetAtPath<Material>(OpenWorldBase + "MountainRock.mat");
             var grassMat = AssetDatabase.LoadAssetAtPath<Material>(MatBase + "Foliage/Mat_ThamThucVat_CloverFlower.mat")
                         ?? AssetDatabase.LoadAssetAtPath<Material>(MatBase + "Foliage/Mat_ThamCo_Wuxia.mat");
 
+            // Natural shoreline positions along the water's edge and village outskirts (No view blocking!)
             Vector3[] clusterPos = {
-                new Vector3(-4.5f, 0f, -12.5f), new Vector3(3.5f, 0f, -11.5f),
-                new Vector3(-12f, 0f, -11.8f), new Vector3(-7f, 0f, -19.2f),
-                new Vector3(1f, 0f, -10.8f), new Vector3(8f, 0f, -20.2f),
-                new Vector3(15f, 0f, -9.8f), new Vector3(22f, 0f, -20.8f),
-                new Vector3(-24f, 0f, -18.5f), new Vector3(31f, 0f, -11.2f),
-                new Vector3(-15f, 0f, 6.0f), new Vector3(-1.0f, 0f, -11.0f)
+                new Vector3(-13.5f, 0f, -12.5f), new Vector3(-20.5f, 0f, -14.2f),
+                new Vector3(-28.0f, 0f, -17.5f), new Vector3(7.5f, 0f, -10.8f),
+                new Vector3(14.5f, 0f, -9.8f),   new Vector3(23.5f, 0f, -19.5f),
+                new Vector3(30.0f, 0f, -11.0f),  new Vector3(-14.5f, 0f, 6.5f),
+                new Vector3(8.5f, 0f, 2.5f)
             };
 
             for (int i = 0; i < clusterPos.Length; i++)
@@ -243,47 +239,47 @@ namespace ThanhGiong.Editor
                 clusterGo.transform.position = new Vector3(clusterPos[i].x, groundY + 0.02f, clusterPos[i].z);
                 clusterGo.transform.rotation = Quaternion.Euler(0f, (i * 47f) % 360f, 0f);
 
-                // 1. Central weathered river boulder
+                // 1. Central weathered river boulder (Natural human scale ~0.8m)
                 if (rockA != null)
                 {
                     var central = (GameObject)PrefabUtility.InstantiatePrefab(rockA, clusterGo.transform);
                     central.name = "DaCuoi_TrungTam";
                     central.transform.localPosition = Vector3.zero;
                     central.transform.localRotation = Quaternion.Euler(0f, (i * 31f) % 360f, 0f);
-                    central.transform.localScale = Vector3.one * Random.Range(2.0f, 2.7f);
+                    central.transform.localScale = Vector3.one * Random.Range(0.85f, 1.25f);
                     if (stoneMat != null) SetMatRecursive(central, stoneMat);
                 }
 
-                // 2. Satellite companion stones nestled around the base (3-4 smaller stones)
+                // 2. Satellite companion stones nestled around the base (Natural pebble scale ~0.35m - 0.65m)
                 if (rockB != null)
                 {
-                    int satCount = 3 + (i % 2);
+                    int satCount = 2 + (i % 2);
                     for (int s = 0; s < satCount; s++)
                     {
-                        float ang = s * (Mathf.PI * 2f / satCount) + 0.35f;
-                        float dist = Random.Range(0.75f, 1.25f);
+                        float ang = s * (Mathf.PI * 2f / satCount) + 0.45f;
+                        float dist = Random.Range(0.55f, 0.95f);
                         var sat = (GameObject)PrefabUtility.InstantiatePrefab(rockB, clusterGo.transform);
                         sat.name = $"DaCuoi_VeTinh_{s + 1}";
                         sat.transform.localPosition = new Vector3(Mathf.Cos(ang) * dist, 0.01f, Mathf.Sin(ang) * dist);
                         sat.transform.localRotation = Quaternion.Euler(Random.Range(-8f, 8f), Random.Range(0f, 360f), Random.Range(-8f, 8f));
-                        sat.transform.localScale = Vector3.one * Random.Range(0.85f, 1.45f);
+                        sat.transform.localScale = Vector3.one * Random.Range(0.40f, 0.70f);
                         if (stoneMat != null) SetMatRecursive(sat, stoneMat);
                     }
                 }
 
-                // 3. Sharp wild grass tufts sprouting directly out of stone crevices (Image 3)
+                // 3. Sharp wild grass tufts sprouting directly out of stone crevices (Reference Image 3)
                 if (grassTuftAsset != null)
                 {
-                    int grassCount = 4 + (i % 3);
+                    int grassCount = 3 + (i % 2);
                     for (int g = 0; g < grassCount; g++)
                     {
                         float gAng = g * (Mathf.PI * 2f / grassCount) + 0.65f;
-                        float gDist = Random.Range(0.5f, 0.95f);
+                        float gDist = Random.Range(0.35f, 0.65f);
                         var tuft = (GameObject)PrefabUtility.InstantiatePrefab(grassTuftAsset, clusterGo.transform);
                         tuft.name = $"BuiCo_KheDa_{g + 1}";
                         tuft.transform.localPosition = new Vector3(Mathf.Cos(gAng) * gDist, 0.02f, Mathf.Sin(gAng) * gDist);
                         tuft.transform.localRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-                        tuft.transform.localScale = new Vector3(0.85f, Random.Range(1.0f, 1.45f), 0.85f);
+                        tuft.transform.localScale = new Vector3(0.6f, Random.Range(0.75f, 1.10f), 0.6f);
                         if (grassMat != null) SetMatRecursive(tuft, grassMat);
                     }
                 }
