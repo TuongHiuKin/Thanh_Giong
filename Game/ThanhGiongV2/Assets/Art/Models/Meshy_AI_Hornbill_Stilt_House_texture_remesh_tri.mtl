@@ -1,0 +1,9 @@
+newmtl Meshy_AI_Hornbill_Stilt_House_texture_remesh_tri_Mat
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.100 0.100 0.100
+d 1.0
+illum 2
+map_Kd Meshy_AI_Hornbill_Stilt_House_texture_remesh_tri_albedo.jpg
+bump Meshy_AI_Hornbill_Stilt_House_texture_remesh_tri_normal.jpg
+map_bump Meshy_AI_Hornbill_Stilt_House_texture_remesh_tri_normal.jpg

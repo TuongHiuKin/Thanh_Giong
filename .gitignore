@@ -37,3 +37,8 @@
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Root raw downloaded assets folder (actual Unity project assets are under Game/ThanhGiongV2/Assets)
+/Assets/
+/*.glb
+
