@@ -1,15 +1,22 @@
-# Unity generated
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
-/[Mm]emoryCaptures/
-/[Rr]ecordings/
+# Unity temporary / cache directories
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+**/Library/
+**/Temp/
+**/Logs/
+**/UserSettings/
+**/Build/
+**/Builds/
+**/obj/
 
-# Visual Studio / VS Code
+# Visual Studio / Rider / IDE files
 .vs/
 .idea/
 .vscode/
@@ -35,3 +42,16 @@
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Raw downloaded loose models at root
+/*.glb
+/Assets/CauGo_SongPhuDong/
+/Assets/ChoiLoRen_PhuDong/
+/Assets/CongDon_GiacAn/
+/Assets/CongLang_PhuDong/
+/Assets/DaiDaThieng_NuiSoc/
+/Assets/DinhLang_DongSon/
+/Assets/LeuTrai_GiacAn/
+/Assets/LongGo_GiamDan/
+/Assets/ThapCanh_GiacAn/
+
