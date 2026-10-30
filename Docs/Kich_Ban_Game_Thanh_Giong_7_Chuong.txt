@@ -1,0 +1,252 @@
+﻿GAME NARRATIVE  •  VIETNAMESE MYTHOLOGY
+THÁNH GIÓNG
+HUYỀN THOẠI PHÙ ĐỔNG
+KỊCH BẢN GAME HOÀN CHỈNH  |  PHIÊN BẢN 7 CHƯƠNG
+Tài liệu cốt truyện, nhiệm vụ, cinematic, nhân vật và định hướng gameplay
+3D ACTION ADVENTURE  •  HISTORICAL FANTASY  •  THIRD-PERSON
+TỔNG QUAN DỰ ÁN
+Tên tiếng Anh
+Saint Giong: The Legend of Phu Dong
+Thể loại
+3D Action Adventure – Historical Fantasy
+Bối cảnh
+Nước Văn Lang, thời vua Hùng thứ sáu
+Góc nhìn
+Third-Person (ngôi thứ ba)
+Cấu trúc
+1 trailer mở đầu và 7 chương chính
+Phong cách đồ họa
+Cinematic AAA, thần thoại Việt Nam; gợi cảm hứng từ văn hóa Việt Cổ – Đông Sơn
+Thông điệp
+Lòng yêu nước, tinh thần đoàn kết và ý chí bảo vệ quê hương
+CẤU TRÚC NỘI DUNG
+Phần
+Tên chương
+Trọng tâm
+TRAILER
+Sự ra đời của huyền thoại
+Văn Lang, dấu chân kỳ lạ, giặc Ân và sứ giả
+CHƯƠNG 1
+Sự thức tỉnh của tráng sĩ
+Lớn nhanh, tìm nguyên liệu và giải cứu dân phu
+CHƯƠNG 2
+Lò lửa Phù Đổng
+Rèn tự động, nhận giáp, roi sắt và ngựa sắt
+CHƯƠNG 3
+Tráng sĩ xuất trận
+Giải cứu dân làng và đánh tướng tiên phong
+CHƯƠNG 4
+Phá tan phòng tuyến giặc Ân
+Công phá doanh trại và đánh tướng phòng tuyến
+CHƯƠNG 5
+Đại chiến Văn Lang
+Chiến trường lớn, roi sắt bị gãy
+CHƯƠNG 6
+Tre ngà diệt giặc
+Nhổ tre, cưỡi ngựa và đánh đại tướng cuối
+CHƯƠNG 7
+Huyền thoại bất tử
+Núi Sóc, bay về trời, Phù Đổng Thiên Vương
+NGUYÊN TẮC THIẾT KẾ
+Người chơi chỉ thu thập nguyên liệu và giao cho NPC; không có thao tác rèn, đập búa hoặc lắp ráp ngựa thủ công.
+Áo giáp sắt, mũ sắt, roi sắt và ngựa sắt được các thợ rèn hoàn thiện tự động thông qua cinematic.
+Trận chiến tăng dần về quy mô: giải cứu → phá phòng tuyến → đại chiến → tre ngà đánh boss cuối.
+Tạo hình Thánh Gióng thống nhất xuyên suốt: giáp sắt Việt Cổ cách điệu, mũ sắt có chùm lông đỏ, ngựa sắt phun lửa.
+Các đội quân, tướng giặc và nhiệm vụ phụ là tình tiết mở rộng cho gameplay, không phải chi tiết nguyên tác.
+PHẦN 0 – TRAILER: SỰ RA ĐỜI CỦA HUYỀN THOẠI
+HÌNH THỨC
+Cinematic mở đầu  |  Thời lượng đề xuất: 90–120 giây
+Phân cảnh 1 – Văn Lang thanh bình
+Mở đầu bằng những cánh đồng lúa xanh, những ngôi nhà mái lá nằm bên lũy tre và cuộc sống bình yên của người dân Văn Lang.
+“Thuở xa xưa, dưới thời vua Hùng thứ sáu, đất nước Văn Lang thanh bình, muôn dân an cư lạc nghiệp...”
+Phân cảnh 2 – Dấu chân kỳ lạ
+Tại làng Phù Đổng, một người phụ nữ phát hiện dấu chân khổng lồ ngoài đồng. Bà tò mò đặt chân mình vào dấu chân ấy. Sau đó, bà mang thai và mười hai tháng sau sinh ra một cậu bé khôi ngô. Tuy nhiên, đến ba tuổi, đứa trẻ vẫn không biết nói, không biết cười, cũng không biết đi.
+Phân cảnh 3 – Giặc Ân xâm lược
+Khung cảnh yên bình chuyển sang chiến tranh. Quân giặc Ân tràn vào lãnh thổ Văn Lang, đốt phá làng mạc, khiến người dân phải chạy trốn. Tiếng vó ngựa, tiếng trống trận và tiếng kêu cứu vang lên.
+“Nhưng rồi, bóng tối chiến tranh bao trùm non sông. Giặc Ân kéo đến, đe dọa sự bình yên của đất nước...”
+Phân cảnh 4 – Lệnh vua Hùng
+Trong cung điện, vua Hùng triệu tập quần thần và ra lệnh tìm người tài đánh giặc.
+“Hãy truyền lệnh khắp nơi, tìm người tài giỏi đứng lên đánh giặc, cứu lấy giang sơn!”
+Sứ giả lập tức cưỡi ngựa đi khắp các ngôi làng.
+Phân cảnh 5 – Sứ giả đến Phù Đổng
+Sứ giả dừng ngựa trước làng Phù Đổng và truyền lệnh:
+“Loa! Loa! Loa! Nhà vua truyền tìm người tài giỏi đánh đuổi quân xâm lược, bảo vệ non sông!”
+Bên trong một ngôi nhà nhỏ, cậu bé ba tuổi đang nằm trên giường tre. Nghe tiếng sứ giả, đôi mắt cậu bỗng ánh lên. Máy quay tiến gần đến gương mặt Thánh Gióng; màn hình chuyển sang màu đen.
+Dòng chữ kết: “Khi non sông lâm nguy, một huyền thoại sẽ thức tỉnh.”
+THÁNH GIÓNG: HUYỀN THOẠI PHÙ ĐỔNG
+Kết thúc trailer – Bắt đầu game.
+CHƯƠNG 1 – SỰ THỨC TỈNH CỦA TRÁNG SĨ
+GAMEPLAY
+Khám phá  |  Thu thập nguyên liệu  |  Điều khiển nhân vật  |  Chiến đấu cơ bản
+Cốt truyện
+Ngay khi nghe tiếng sứ giả, cậu bé Thánh Gióng bất ngờ cất tiếng nói đầu tiên:
+“Mẹ ơi! Mẹ hãy mời sứ giả vào đây cho con!”
+Người mẹ kinh ngạc nhưng lập tức làm theo. Khi gặp sứ giả, Gióng nói:
+“Ông hãy về tâu với vua, rèn cho ta một con ngựa sắt, một roi sắt và một bộ áo giáp sắt. Ta sẽ đánh tan quân giặc!”
+Sứ giả vội vàng về kinh đô báo tin. Từ hôm đó, Thánh Gióng ăn bao nhiêu cũng không đủ. Cơm ăn hết nồi này đến nồi khác, áo vừa may xong đã chật. Dân làng Phù Đổng cùng nhau góp gạo, góp thức ăn để nuôi Gióng.
+Gióng lớn nhanh như thổi, chẳng bao lâu đã trở thành một tráng sĩ cao lớn, khỏe mạnh phi thường. Trong khi triều đình huy động thợ rèn chế tạo trang bị, số nguyên liệu cần thiết vẫn chưa đủ. Thánh Gióng quyết định cùng người dân tìm kiếm nguyên liệu.
+Hệ thống nhiệm vụ
+Nhiệm vụ 1.1 – Sự thức tỉnh.  Cinematic Thánh Gióng lớn nhanh như thổi. Người chơi điều khiển nhân vật trưởng thành, học di chuyển, chạy, nhảy, tương tác NPC, nhặt vật phẩm và nâng vật cản.
+Nhiệm vụ 1.2 – Lời nhờ cậy của thợ rèn.  Người chơi gặp NPC thợ rèn trưởng; hệ thống mở khóa nhiệm vụ thu thập nguyên liệu.
+“Để rèn được áo giáp và vũ khí cho tráng sĩ, chúng ta cần rất nhiều sắt. Xin ngài hãy giúp dân làng tìm kiếm nguyên liệu!”
+Nhiệm vụ 1.3 – Hành trình đến khu mỏ.  Khám phá rừng tre, đường núi và khu mỏ quặng.
+Nhiệm vụ 1.4 – Thu thập nguyên liệu.  Thu thập quặng sắt, than củi và các vật liệu theo chỉ tiêu nhiệm vụ.
+Nhiệm vụ 1.5 – Giải cứu dân phu.  Đánh đuổi nhóm lính trinh sát giặc Ân đang đe dọa dân phu tại khu mỏ. Thánh Gióng chiến đấu bằng tay không.
+Nhiệm vụ 1.6 – Trở về Phù Đổng.  Mang nguyên liệu về giao cho thợ rèn trưởng.
+Nhân vật xuất hiện
+Thánh Gióng trưởng thành chưa mặc giáp; mẹ Gióng; sứ giả; trưởng làng; thợ rèn trưởng; dân phu; thợ mỏ; lính trinh sát giặc Ân.
+Cinematic kết chương
+Thợ rèn trưởng nhận nguyên liệu và tuyên bố:
+“Nguyên liệu đã được mang về. Lò lửa Phù Đổng sẽ sớm rực cháy!”
+Cinematic chuyển sang cảnh những người thợ chuẩn bị lò rèn.
+CHƯƠNG 2 – LÒ LỬA PHÙ ĐỔNG
+GAMEPLAY
+Thu thập bổ sung  |  Bảo vệ lò rèn  |  Nhận trang bị tự động
+Cốt truyện
+Theo lệnh vua Hùng, những thợ rèn tài giỏi được tập hợp về Phù Đổng. Họ chuẩn bị chế tạo áo giáp, mũ sắt, roi sắt và ngựa sắt cho Thánh Gióng. Để hoàn thành những trang bị khổng lồ, các thợ rèn vẫn cần thêm nguyên liệu.
+Quân giặc Ân nghe tin về một tráng sĩ phi thường và cử một đội lính đến phá hoại khu vực chế tạo. Thánh Gióng phải bảo vệ lò rèn để đảm bảo chiến mã và vũ khí được hoàn thành.
+Hệ thống nhiệm vụ
+Nhiệm vụ 2.1 – Nguyên liệu cuối cùng.  Tìm kiếm và thu thập thêm nguyên liệu theo yêu cầu của thợ rèn.
+Nhiệm vụ 2.2 – Bảo vệ lò rèn.  Đánh đuổi nhóm giặc Ân xuất hiện gần làng Phù Đổng; ở giai đoạn này Gióng chủ yếu sử dụng sức mạnh thể chất.
+Nhiệm vụ 2.3 – Hoàn thành trang bị.  Người chơi trở về giao đủ nguyên liệu. Game tự kích hoạt cinematic các thợ rèn nung sắt, đập búa và hoàn thành áo giáp sắt, mũ sắt, roi sắt. Người chơi không tự rèn.
+Thánh Gióng bước vào lò rèn. Thợ rèn trưởng nói:
+“Thưa tráng sĩ, áo giáp và roi sắt đã hoàn thành. Xin ngài hãy dùng chúng để bảo vệ non sông!”
+Thánh Gióng khoác áo giáp sắt mang hoa văn lấy cảm hứng Đông Sơn, đội mũ sắt có chùm lông đỏ và cầm roi sắt.
+Nhiệm vụ 2.4 – Chiến mã huyền thoại.  Thợ rèn hoàn thiện ngựa sắt tự động trong cinematic. Chiến mã thức tỉnh, mắt rực sáng và phun ra ngọn lửa dữ dội.
+Nhiệm vụ 2.5 – Làm chủ chiến mã.  Học điều khiển ngựa sắt, tăng tốc, vượt chướng ngại, tấn công bằng roi sắt và kích hoạt kỹ năng phun lửa.
+Trang bị mở khóa
+Áo giáp sắt phong cách Việt Cổ; mũ sắt có chùm lông đỏ; roi sắt; ngựa sắt phun lửa.
+Cinematic kết chương
+Sứ giả từ tiền tuyến mang tin quân giặc đang tiến sâu vào Văn Lang. Thánh Gióng mặc giáp, đội mũ sắt, cầm roi sắt nhảy lên ngựa. Chiến mã hí vang, phun lửa và lao về phía chiến trường.
+CHƯƠNG 3 – TRÁNG SĨ XUẤT TRẬN
+GAMEPLAY
+Chiến đấu cưỡi ngựa  |  Giải cứu dân làng  |  Boss đầu tiên
+Cốt truyện
+Trên đường ra trận, Thánh Gióng phát hiện những ngôi làng đang bị quân giặc Ân tàn phá. Dân làng phải chạy trốn, lương thực bị cướp bóc, nhiều con đường bị quân giặc kiểm soát.
+Thánh Gióng cưỡi ngựa sắt xông vào hàng ngũ địch. Roi sắt quét tan quân giặc, ngựa sắt phun lửa khiến đội hình của chúng hỗn loạn. Sau khi giải cứu người dân, chàng tiếp tục giải phóng các khu vực bị chiếm đóng.
+Hệ thống nhiệm vụ
+Nhiệm vụ 3.1 – Trận chiến đầu tiên.  Đánh bại đội quân giặc chắn đường.
+Nhiệm vụ 3.2 – Ngôi làng trong khói lửa.  Giải cứu dân làng khỏi quân địch.
+Nhiệm vụ 3.3 – Con đường tiếp tế.  Chặn đoàn xe vận chuyển lương thực của quân giặc.
+Nhiệm vụ 3.4 – Bảo vệ dân làng.  Chống lại nhiều đợt tấn công liên tiếp.
+Nhiệm vụ 3.5 – Boss: Tướng tiên phong.  Đối đầu chỉ huy giặc Ân dùng giáo dài và khiên. Boss đâm giáo, phòng thủ bằng khiên và gọi lính hỗ trợ; người chơi cần né đòn và phá thế phòng thủ.
+Kết thúc chương
+Quân giặc rút lui, các ngôi làng được giải phóng. Thánh Gióng phát hiện một phòng tuyến lớn của giặc Ân đang chặn đường tiến quân và tiếp tục lên đường.
+CHƯƠNG 4 – PHÁ TAN PHÒNG TUYẾN GIẶC ÂN
+GAMEPLAY
+Công phá doanh trại  |  Phá công trình  |  Đối đầu quân giáp nặng
+Cốt truyện
+Nhận thấy sức mạnh của Thánh Gióng, quân giặc Ân xây dựng một hệ thống phòng thủ lớn. Chúng dựng hàng rào, cổng trại, tháp canh và bố trí cung thủ, lính giáo cùng lính khiên. Để tiến đến chiến trường chính, Thánh Gióng phải phá tan tuyến phòng ngự.
+Hệ thống nhiệm vụ
+Nhiệm vụ 4.1 – Tiếp cận doanh trại.  Tìm đường vượt qua chướng ngại và vị trí canh gác.
+Nhiệm vụ 4.2 – Phá hủy tháp canh.  Đánh bại cung thủ, phá các vị trí phòng thủ từ xa.
+Nhiệm vụ 4.3 – Phá cổng doanh trại.  Sử dụng sức mạnh của ngựa sắt và Thánh Gióng để phá cổng.
+Nhiệm vụ 4.4 – Giao chiến trong doanh trại.  Đối đầu những đội quân giáp nặng, lính giáo và lính khiên.
+Nhiệm vụ 4.5 – Boss: Tướng phòng tuyến.  Tên tướng mặc giáp nặng, dùng chùy chiến và khiên lớn. Boss phòng thủ cao và có đòn quét trên diện rộng; người chơi phải né, tìm sơ hở rồi đánh bại hắn.
+Kết thúc chương
+Phòng tuyến địch bị phá hủy. Thánh Gióng tiến đến vị trí cao nhất của doanh trại và nhìn thấy đại quân giặc Ân đang tập hợp trên chiến trường rộng lớn. Tiếng trống trận vang lên từ xa; cuộc quyết chiến sắp bắt đầu.
+CHƯƠNG 5 – ĐẠI CHIẾN VĂN LANG
+GAMEPLAY
+Chiến tranh quy mô lớn  |  Cưỡi ngựa  |  Nhiều đợt quân địch
+Cốt truyện
+Sau hàng loạt thất bại, đại tướng giặc Ân quyết định tập hợp lực lượng chủ lực, gồm lính giáo, lính khiên, cung thủ và kỵ binh. Đại quân dàn trận chờ đợi Thánh Gióng.
+Giữa tiếng trống trận dồn dập, Thánh Gióng cưỡi ngựa sắt xuất hiện. Một mình đối mặt với biển quân thù, chàng nâng cao roi sắt và xông thẳng vào chiến trận. Ngựa sắt phun lửa, roi sắt quét tan từng hàng quân.
+Hệ thống nhiệm vụ
+Nhiệm vụ 5.1 – Làn sóng đầu tiên.  Đánh tan đội quân bộ binh.
+Nhiệm vụ 5.2 – Mưa tên trên chiến trường.  Vượt qua trận địa cung thủ và phá các vị trí đánh xa.
+Nhiệm vụ 5.3 – Kỵ binh giặc Ân.  Chiến đấu với các đơn vị quân giặc cưỡi ngựa.
+Nhiệm vụ 5.4 – Vòng vây đại quân.  Kết hợp roi sắt, né tránh và ngựa sắt phun lửa để phá vòng vây từ nhiều hướng.
+Nhiệm vụ 5.5 – Trận chiến khốc liệt.  Đối đầu lực lượng tinh nhuệ cuối cùng trước khi gặp đại tướng.
+Cao trào – Roi sắt bị gãy
+Trong lúc giao chiến, Thánh Gióng vung mạnh roi sắt đánh tan hàng ngũ quân giặc. Sau một đòn đánh dữ dội, cây roi sắt bất ngờ gãy.
+Quân giặc thấy Gióng mất vũ khí nên đồng loạt bao vây. Chàng đứng giữa chiến trường, quan sát xung quanh và nhìn thấy một rặng tre xanh bên đường. Máy quay chuyển đến những cây tre.
+Kết thúc chương 5.
+CHƯƠNG 6 – TRE NGÀ DIỆT GIẶC
+GAMEPLAY
+Tre ngà  |  Chiến đấu cưỡi ngựa  |  Final Boss
+Cốt truyện
+Roi sắt gãy, quân giặc tưởng Thánh Gióng không còn khả năng chiến đấu. Nhưng chàng không hề nao núng. Gióng tiến đến rặng tre bên đường, dùng sức mạnh phi thường nhổ bật những cây tre lớn khỏi mặt đất.
+Cầm cây tre trong tay, chàng quay lại đối mặt với quân thù. Một đòn quét mạnh khiến quân giặc bị đánh bật, hàng ngũ tan rã. Thánh Gióng tiếp tục cưỡi ngựa sắt, dùng tre ngà làm vũ khí tiến đến vị trí đại tướng giặc Ân.
+Hệ thống nhiệm vụ
+Nhiệm vụ 6.1 – Vũ khí từ đất mẹ.  Tương tác với rặng tre, nhổ tre làm vũ khí; mở khóa hệ thống chiến đấu bằng tre ngà.
+Nhiệm vụ 6.2 – Phá tan vòng vây.  Đánh bại quân địch đang bao vây.
+Nhiệm vụ 6.3 – Chiến mã và tre ngà.  Cưỡi ngựa sắt, sử dụng tre ngà và kỹ năng phun lửa để tấn công.
+Nhiệm vụ 6.4 – Đội cận vệ cuối cùng.  Đánh bại lực lượng tinh nhuệ bảo vệ đại tướng giặc Ân.
+Nhiệm vụ 6.5 – FINAL BOSS: ĐẠI TƯỚNG GIẶC ÂN
+Đại tướng xuất hiện trong bộ giáp đen nặng nề, khoác áo choàng đỏ thẫm và cầm một thanh đại đao khổng lồ. Hắn là chỉ huy cao nhất của quân xâm lược trong phiên bản game.
+Giai đoạn 1 – Đối đầu trực diện.  Thánh Gióng dùng tre ngà chiến đấu trên mặt đất để chống lại những đòn đại đao.
+Giai đoạn 2 – Vòng vây cuối cùng.  Khi bị áp đảo, boss gọi đội cận vệ; người chơi phá vòng vây rồi tấn công boss.
+Giai đoạn 3 – Sức mạnh Phù Đổng.  Thánh Gióng cưỡi ngựa sắt, cầm tre ngà xông thẳng về phía đại tướng; chiến mã phun lửa và người chơi tung đòn quyết định.
+Cinematic chiến thắng
+Đại tướng thất bại, quân giặc hoảng loạn tháo chạy. Thánh Gióng truy kích, đánh tan quân xâm lược. Tiếng gươm giáo dần im lặng, ánh mặt trời xuất hiện qua những đám mây. Người dân Văn Lang vui mừng vì quê hương được giải phóng.
+Thánh Gióng cưỡi trên lưng ngựa sắt, nhìn về phía non sông. Cuộc chiến kết thúc. Chàng lặng lẽ hướng về vùng núi Sóc.
+CHƯƠNG 7 – HUYỀN THOẠI BẤT TỬ
+GAMEPLAY
+Cưỡi ngựa  |  Khám phá ngắn  |  Cinematic kết thúc
+Cốt truyện
+Sau khi đánh tan giặc Ân, Thánh Gióng không trở về kinh đô nhận thưởng. Chàng cưỡi ngựa sắt tiến về vùng núi Sóc. Khung cảnh chiến trường dần biến mất, thay bằng rừng xanh, dòng suối và núi non. Người chơi điều khiển Gióng đi theo con đường cuối cùng lên đỉnh núi.
+Hệ thống nhiệm vụ
+Nhiệm vụ 7.1 – Con đường đến núi Sóc.  Cưỡi ngựa qua đường rừng và tiến lên núi.
+Nhiệm vụ 7.2 – Đỉnh núi thiêng.  Đến đỉnh núi, tương tác với điểm kết thúc và kích hoạt cinematic.
+Cinematic kết thúc
+Thánh Gióng xuống ngựa. Chàng từ từ tháo bỏ bộ áo giáp sắt và chiếc mũ sắt, để lại trên đỉnh núi. Người anh hùng nhìn về phía giang sơn Văn Lang lần cuối. Những cánh đồng, dòng sông và ngôi làng được bảo vệ hiện ra trong nắng ban mai.
+Thánh Gióng bước lên lưng ngựa sắt. Chiến mã hí vang, bốn chân rời khỏi mặt đất. Gióng cùng ngựa sắt bay lên trời, dần biến mất giữa những tầng mây.
+Phân cảnh cuối
+Tại kinh đô, vua Hùng nhận được tin chiến thắng. Biết Thánh Gióng đã bay về trời, nhà vua phong người là Phù Đổng Thiên Vương và cho lập đền thờ để tưởng nhớ công lao cứu nước.
+Máy quay chuyển về làng Phù Đổng. Cuộc sống bình yên đã trở lại.
+“Người anh hùng đã trở về trời, nhưng tinh thần yêu nước và ý chí bất khuất sẽ mãi sống trong lòng dân tộc Việt Nam.”
+THE END  –  THÁNH GIÓNG: HUYỀN THOẠI PHÙ ĐỔNG
+HỆ THỐNG GAMEPLAY VÀ NHÂN VẬT
+1. Thu thập và chế tạo tự động
+Người chơi chỉ có nhiệm vụ thu thập nguyên liệu theo yêu cầu của NPC. Không có thao tác rèn, đập búa hoặc tự lắp ráp chiến mã.
+Bước 1.  Gặp NPC thợ rèn và nhận yêu cầu.
+Bước 2.  Khám phá bản đồ, thu thập đủ vật liệu.
+Bước 3.  Trở về giao nguyên liệu.
+Bước 4.  Game tự động kích hoạt cinematic chế tạo.
+Bước 5.  Người chơi nhận trang bị hoặc chiến mã sau cinematic.
+2. Các tạo hình Thánh Gióng
+Tạo hình
+Xuất hiện
+Thánh Gióng ba tuổi
+Trailer
+Thánh Gióng lớn nhanh như thổi
+Chương 1
+Tráng sĩ chưa mặc giáp
+Chương 1
+Thánh Gióng mặc giáp Việt Cổ, đội mũ sắt, cầm roi sắt
+Chương 2
+Thánh Gióng cưỡi ngựa sắt, cầm roi sắt
+Chương 2–5
+Thánh Gióng cưỡi ngựa sắt, cầm tre ngà
+Chương 6
+Thánh Gióng bay về trời
+Chương 7
+3. Các nhóm nhân vật cần xây dựng
+Nhân vật Văn Lang: Mẹ Gióng; vua Hùng; sứ giả; trưởng làng; thợ rèn trưởng và các thợ rèn; thợ mỏ; dân phu; người già; phụ nữ; trẻ em.
+Nhân vật quân giặc Ân: Lính trinh sát; lính cầm giáo; lính cầm khiên; cung thủ; kỵ binh; lính giáp nặng; tướng tiên phong; tướng phòng tuyến; đại tướng giặc Ân – Final Boss.
+4. Phong cách tạo hình thống nhất
+Thánh Gióng.  Trẻ tuổi, cao lớn, khỏe mạnh, gương mặt mang nét Việt. Giáp sắt đen xám, chi tiết đồng vàng, hoa văn gợi văn hóa Đông Sơn, mũ sắt có chùm lông đỏ.
+Ngựa sắt.  Thân hình khổng lồ, làm bằng sắt, trang trí họa tiết Việt Cổ cách điệu, phun lửa từ miệng; thần thoại chứ không phải robot hiện đại.
+Dân làng.  Trang phục vải thô, tông nâu đất, nâu đỏ; giản dị, phù hợp bối cảnh Việt Cổ cách điệu.
+Thợ rèn.  Vóc dáng khỏe, phục trang lao động bằng vải thô và da; búa, kìm rèn và công cụ truyền thống.
+Quân giặc Ân.  Con người mặc giáp cổ đại, có ngôn ngữ thiết kế tách biệt quân Văn Lang; không biến thành quái vật.
+Final Boss.  Nam tướng cao lớn, gương mặt dữ tợn, giáp đen đồ sộ, áo choàng đỏ thẫm, cầm đại đao, tạo cảm giác đối thủ mạnh nhất.
+5. Phân chia sản xuất
+Phần I – Sự thức tỉnh và chuẩn bị (Chương 1–2).  Khám phá, thu thập, nhận trang bị và chiến mã.
+Phần II – Cuộc chiến bảo vệ Văn Lang (Chương 3–6).  Giải cứu dân làng, phá doanh trại, đại chiến, roi gãy, tre ngà và boss cuối.
+Phần III – Huyền thoại bất tử (Chương 7).  Núi Sóc, bay về trời và kết thúc game.
+6. Giới hạn giữa truyền thuyết và phần sáng tạo
+Các sự kiện cốt lõi được giữ theo truyền thuyết: Thánh Gióng ra đời kỳ lạ, ba tuổi cất tiếng nói khi nghe sứ giả, lớn nhanh như thổi nhờ dân làng, yêu cầu áo giáp sắt – roi sắt – ngựa sắt, cưỡi ngựa đánh giặc, roi gãy nhổ tre, đánh tan quân xâm lược, bay về trời tại núi Sóc, được phong Phù Đổng Thiên Vương.
+Các nhiệm vụ tìm nguyên liệu, bảo vệ lò rèn, giải cứu các ngôi làng, công phá doanh trại và tướng giặc phụ là tình tiết sáng tạo phục vụ gameplay, không phải các tình tiết được xác nhận trong truyện dân gian. Trang bị và phục trang mang cảm hứng mỹ thuật Việt Cổ, không nhằm phục dựng khảo cổ chính xác.
+PHỤ LỤC – HÌNH ẢNH THAM KHẢO NHÂN VẬT
+Bộ hình ảnh tham khảo phục vụ thiết kế nhân vật, môi trường và cinematic trong Unity. Hình ảnh là concept art; khi làm mô hình 3D cần thống nhất tỷ lệ, chất liệu, chi tiết và phối màu.
+Thánh Gióng cưỡi ngựa sắt, cầm tre ngà
+Chương 6 – tạo hình chiến đấu với tre ngà
+Người dân làng Phù Đổng
+Các NPC dân làng, người già và trẻ em
+Những người thợ rèn
+NPC thợ rèn và không gian lò rèn
+Đội quân lính giặc Ân
+Các đơn vị lính giáo, khiên và cung thủ
+Đại tướng giặc Ân – Final Boss
+Tạo hình tham khảo cho trùm cuối
