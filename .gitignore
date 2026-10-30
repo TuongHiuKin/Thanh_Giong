@@ -7,7 +7,7 @@
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
 [Mm]emoryCaptures/
-[Aa]ssets/AssetStoreTools*
+[Rr]ecordings/
 **/Library/
 **/Temp/
 **/Logs/
@@ -18,11 +18,13 @@
 
 # Visual Studio / Rider / IDE files
 .vs/
+.idea/
 .vscode/
 *.csproj
 *.unityproj
 *.sln
 *.slnx
+.vsconfig
 *.suo
 *.user
 *.userprefs
@@ -30,15 +32,26 @@
 *.booproj
 *.svd
 *.pdb
+*.mdb
 *.opendb
 *.VC.db
-.vsconfig
+
+# Logs & temp
+*.log
 
 # OS generated
 .DS_Store
 Thumbs.db
 
-# Root raw downloaded assets folder (actual Unity project assets are under Game/ThanhGiongV2/Assets)
-/Assets/
+# Raw downloaded loose models at root
 /*.glb
+/Assets/CauGo_SongPhuDong/
+/Assets/ChoiLoRen_PhuDong/
+/Assets/CongDon_GiacAn/
+/Assets/CongLang_PhuDong/
+/Assets/DaiDaThieng_NuiSoc/
+/Assets/DinhLang_DongSon/
+/Assets/LeuTrai_GiacAn/
+/Assets/LongGo_GiamDan/
+/Assets/ThapCanh_GiacAn/
 
